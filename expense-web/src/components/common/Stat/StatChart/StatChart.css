@@ -1,0 +1,306 @@
+.stat-body__chart {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  box-sizing: border-box;
+}
+
+.stat-body__chart--heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.chart-heading__title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.chart-heading__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.chart-heading__title-row h3 {
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.chart-heading__title p {
+  margin: 0;
+  padding: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.chart-heading__badge {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+
+.chart-heading__badge-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-heading__badge-item p {
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.chart-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.chart-legend-dot--income {
+  background-color: var(--primary);
+}
+
+.chart-legend-dot--expense {
+  background-color: #ff5d78;
+}
+
+.chart-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  margin-top: 16px;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.chart-grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.chart-grid-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.chart-grid-label {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-weight: 600;
+  width: 64px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.chart-grid-line {
+  flex: 1;
+  border-bottom: 1px solid #edf1f6;
+}
+
+.chart-bars-group {
+  position: relative;
+  z-index: 2;
+  margin-left: 80px;
+  width: calc(100% - 80px);
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.chart-column-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 64px;
+}
+
+.chart-bars-wrapper {
+  height: 220px;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+}
+
+.chart-bar {
+  width: 24px;
+  border-radius: 5px 5px 2px 2px;
+  transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.chart-bar:hover {
+  opacity: 0.85;
+}
+
+.chart-bar--income {
+  background: var(--primary);
+}
+
+.chart-bar--expense {
+  background: #ff5d78;
+}
+
+.chart-month-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 16px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.chart-month-label--active {
+  color: var(--primary);
+}
+
+.chart-current-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--primary);
+}
+
+.chart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 16px;
+  text-align: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chart-empty__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--surface-hover);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-lg);
+  margin-bottom: 4px;
+}
+
+.chart-empty__text {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.chart-empty__sub {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+@media (max-width: 1024px) {
+  .stat-body__chart {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .stat-body__chart--heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .chart-heading__badge {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-body__chart {
+    padding: 16px;
+    border-radius: 16px;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .chart-heading__title-row h3 {
+    font-size: var(--fs-base);
+  }
+
+  .chart-heading__badge {
+    width: 100%;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 12px;
+    gap: 8px;
+    box-sizing: border-box;
+  }
+
+  .chart-heading__badge-item p {
+    font-size: var(--fs-xs);
+  }
+
+  .chart-canvas-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .chart-bars-group {
+    min-width: 380px;
+  }
+
+  .chart-bar {
+    width: 16px;
+    border-radius: 6px 6px 4px 4px;
+  }
+
+  .chart-bars-wrapper {
+    gap: 4px;
+  }
+
+  .chart-month-label {
+    font-size: var(--fs-xs);
+  }
+}

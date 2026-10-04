@@ -1,0 +1,102 @@
+.backup-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: auto;
+}
+
+.backup-card__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.backup-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: #e1ecfb;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-base);
+  flex-shrink: 0;
+}
+
+.backup-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.backup-card__info h3 {
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-base);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.backup-card__info p {
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.backup-card__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: none;
+  background-color: #e1ecfb;
+  color: var(--primary);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.backup-card__btn:hover {
+  opacity: 0.85;
+}
+
+.backup-card__btn:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+  .backup-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .backup-card__btn {
+    width: 100%;
+    justify-content: center;
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .backup-card__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .backup-card__info h3 {
+    font-size: var(--fs-sm);
+  }
+}

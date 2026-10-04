@@ -1,0 +1,22 @@
+:root {
+  --primary: #2457c5;
+  --primary-hover: #1e46a0;
+  --primary-light: #eaf1ff;
+  --secondary: #6b8fdc;
+
+  --income: #15836d;
+  --expense: #c94a4a;
+  --neutral: #64748b;
+
+  --bg: #f4f7fb;
+  --bg-auth: #f4f7fb;
+  --surface: #ffffff;
+  --surface-hover: #f7f9fc;
+  --border: #dde5ef;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --text-inverse: #ffffff;
+
+  --btn-gradient: #2457c5;
+  --icon-gradient: #2457c5;
+}

@@ -1,0 +1,187 @@
+.health-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+.health-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.health-card__header h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-md);
+  font-weight: 700;
+}
+
+.health-card__badge {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.health-gauge-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.health-gauge {
+  position: relative;
+  width: 190px;
+  height: 190px;
+}
+
+.health-gauge__svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.health-gauge__bg,
+.health-gauge__progress {
+  fill: none;
+  stroke-width: 14;
+}
+
+.health-gauge__bg {
+  stroke: #e7ebf1;
+}
+
+.health-gauge__progress {
+  stroke: var(--primary);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.65s ease;
+}
+
+.health-gauge__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.health-gauge__score {
+  color: var(--text);
+  font-size: 30px;
+  font-weight: 750;
+  line-height: 1;
+}
+
+.health-gauge__scale {
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.health-gauge__rank {
+  color: var(--primary);
+  font-size: var(--fs-sm);
+  font-weight: 650;
+}
+
+.health-gauge__desc,
+.health-gauge__period {
+  margin: 0;
+  max-width: 390px;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.health-gauge__period {
+  font-size: var(--fs-xs);
+}
+
+.health-export-btn {
+  width: 100%;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.health-export-btn:hover {
+  border-color: #cbd8ea;
+  background: var(--surface-hover);
+}
+
+.health-card__empty {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.health-card__empty-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.health-card__empty-text {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.health-card__empty-sub {
+  max-width: 320px;
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .health-card {
+    padding: 16px;
+  }
+
+  .health-gauge {
+    width: 170px;
+    height: 170px;
+  }
+}

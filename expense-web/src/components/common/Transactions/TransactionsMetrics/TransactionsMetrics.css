@@ -1,0 +1,19 @@
+.transactions-metrics-grid {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  margin-top: 24px;
+  box-sizing: border-box;
+}
+
+.transactions-metrics-grid > * {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .transactions-metrics-grid {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

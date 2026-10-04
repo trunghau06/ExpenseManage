@@ -1,0 +1,70 @@
+.dashboard-metrics {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 28px;
+  box-sizing: border-box;
+}
+
+.dashboard-metrics > * {
+  width: 32%;
+  box-sizing: border-box;
+}
+
+.amount-income {
+  color: var(--income);
+}
+
+.amount-expense {
+  color: var(--expense);
+}
+
+
+.stat-card__empty-text {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: normal;
+}
+
+.stat-card--primary .stat-card__empty-text {
+  color: var(--text-muted);
+}
+
+.stat-card__empty-sub {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.stat-card--primary .stat-card__empty-sub {
+  color: var(--text-muted);
+}
+
+@media (max-width: 1024px) {
+  .dashboard-metrics {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .dashboard-metrics > * {
+    width: calc(50% - 8px);
+  }
+
+  .dashboard-metrics > *:last-child {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-metrics {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .dashboard-metrics > *,
+  .dashboard-metrics > *:last-child {
+    width: 100%;
+  }
+}

@@ -1,0 +1,216 @@
+.transactions-table-card {
+  width: 100%;
+  margin-top: 22px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.transactions-table thead tr {
+  background: #f3f6fa;
+}
+
+.transactions-table th {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.transactions-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  vertical-align: middle;
+}
+
+.transactions-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.transactions-table tbody tr:hover {
+  background: #fafbfd;
+}
+
+.col-datetime,
+.col-description {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.col-datetime__date,
+.col-description__title {
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-weight: 650;
+}
+
+.col-datetime__time,
+.col-description__subtitle {
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+}
+
+.col-category {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.col-category__icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: var(--primary-light);
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.col-category__name {
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.col-description {
+  min-width: 190px;
+}
+
+.col-description__tag {
+  width: fit-content;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: #f2f5fa;
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.col-account {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.col-account__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #8aa0bf;
+  flex-shrink: 0;
+}
+
+.col-type {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #f7f9fc;
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.col-type--income,
+.col-type--expense {
+  color: var(--text-muted);
+  background: #f7f9fc;
+}
+
+.col-amount {
+  text-align: right;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.col-amount--income {
+  color: var(--income);
+}
+
+.col-amount--expense {
+  color: var(--expense);
+}
+
+.btn-delete-tx {
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #f8133d;
+  cursor: pointer;
+}
+
+.transactions-table-empty {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 36px 20px;
+  text-align: center;
+}
+
+.transactions-table-empty__icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.transactions-table-empty__text {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.transactions-table-empty__sub {
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+}
+
+@media (max-width: 768px) {
+  .transactions-table-card {
+    margin-top: 16px;
+    border-radius: 14px;
+  }
+
+  .transactions-table th,
+  .transactions-table td {
+    padding: 12px 14px;
+  }
+}

@@ -1,0 +1,92 @@
+.donut-chart {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  width: 100%;
+}
+
+.donut-chart__circle {
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #2457c5 0% 42%,
+    #4674d4 42% 60%,
+    #6b8fdc 60% 76%,
+    #8aa7e5 76% 90%,
+    #b2c5ec 90% 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donut-chart__center {
+  width: 148px;
+  height: 148px;
+  background-color: var(--surface);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.donut-chart__label {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.donut-chart__percentage {
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.donut-chart__category {
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1024px) {
+  .donut-chart__circle {
+    width: 150px;
+    height: 150px;
+  }
+
+  .donut-chart__center {
+    width: 106px;
+    height: 106px;
+  }
+
+  .donut-chart__percentage {
+    font-size: var(--fs-xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .donut-chart {
+    justify-content: center;
+  }
+
+  .donut-chart__circle {
+    width: 160px;
+    height: 160px;
+  }
+
+  .donut-chart__center {
+    width: 112px;
+    height: 112px;
+  }
+
+  .donut-chart__percentage {
+    font-size: var(--fs-xl);
+  }
+}
