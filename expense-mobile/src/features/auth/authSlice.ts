@@ -1,11 +1,18 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from '@reduxjs/toolkit';
 import * as SecureStore from 'expo-secure-store';
+import { setAuthToken } from '../../api/axiosClient';
 
-interface User {
-  id?: string;
-  name?: string;
-  email?: string;
-  [key: string]: any;
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  avatar_url?: string | null;
+  created_at?: string;
 }
 
 interface AuthState {
@@ -22,46 +29,98 @@ const initialState: AuthState = {
   isRestoring: true,
 };
 
-export const restoreLogin = createAsyncThunk('auth/restore', async () => {
-  const token = await SecureStore.getItemAsync('token');
-  const userJs = await SecureStore.getItemAsync('user');
-  if (!token) throw new Error("Chưa Đăng Nhập");
-  return { token, user: userJs ? JSON.parse(userJs) : null };
-});
+export const restoreLogin = createAsyncThunk(
+  'auth/restoreLogin',
+  async () => {
+    const token = await SecureStore.getItemAsync('token');
+    const userJson = await SecureStore.getItemAsync('user');
+
+    if (!token) {
+      return null;
+    }
+
+    const user: User | null = userJson
+      ? JSON.parse(userJson)
+      : null;
+
+    setAuthToken(token);
+
+    return {
+      token,
+      user,
+    };
+  }
+);
+
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async () => {
+    setAuthToken(null);
+
+    await SecureStore.deleteItemAsync('token');
+    await SecureStore.deleteItemAsync('user');
+  }
+);
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    loginSuccess: (state, action: PayloadAction<{ token: string; user: any }>) => {
-      const { token, user } = action.payload;
-      state.token = token;
-      state.user = user;
+    loginSuccess: (
+      state,
+      action: PayloadAction<{
+        token: string;
+        user: User;
+      }>
+    ) => {
+      state.token = action.payload.token;
+      state.user = action.payload.user;
       state.isAuthenticated = true;
-      SecureStore.setItemAsync('token', token);
-      SecureStore.setItemAsync('user', JSON.stringify(user));
     },
-    logout: (state) => {
-      state.token = null;
-      state.user = null;
-      state.isAuthenticated = false;
-      SecureStore.deleteItemAsync('token');
-      SecureStore.deleteItemAsync('user');
+    updateUser: (
+      state,
+      action: PayloadAction<Partial<User>>
+    ) => {
+      if (state.user) {
+        state.user = {
+          ...state.user,
+          ...action.payload,
+        };
+      }
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(restoreLogin.fulfilled, (state, action) => {
-        state.token = action.payload.token;
-        state.user = action.payload.user;
-        state.isAuthenticated = true;
+        if (action.payload) {
+          state.token = action.payload.token;
+          state.user = action.payload.user;
+          state.isAuthenticated = true;
+        } else {
+          state.token = null;
+          state.user = null;
+          state.isAuthenticated = false;
+        }
+
         state.isRestoring = false;
       })
       .addCase(restoreLogin.rejected, (state) => {
+        state.token = null;
+        state.user = null;
+        state.isAuthenticated = false;
         state.isRestoring = false;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.token = null;
+        state.user = null;
+        state.isAuthenticated = false;
       });
   },
 });
 
-export const { loginSuccess, logout } = authSlice.actions;
+export const {
+  loginSuccess,
+  updateUser,
+} = authSlice.actions;
+
 export default authSlice.reducer;
