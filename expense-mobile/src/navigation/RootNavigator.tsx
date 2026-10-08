@@ -25,7 +25,7 @@ import {
 import {
   AppDispatch,
   RootState,
-} from '../app/store';
+} from '../store/store';
 
 export type RootStackParamList = {
   Login: undefined;

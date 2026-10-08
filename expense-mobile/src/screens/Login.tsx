@@ -53,7 +53,7 @@ import {
 
 import {
   AppDispatch,
-} from '../app/store';
+} from '../store/store';
 
 import {
   RootStackParamList,
