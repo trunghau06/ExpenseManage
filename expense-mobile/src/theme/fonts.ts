@@ -1,12 +1,12 @@
 export const fontSizes = {
-  xs: 12,   // 0.75rem  — nhãn nhỏ, ghi chú phụ
-  sm: 14,   // 0.875rem — text phụ, placeholder, link
-  base: 16, // 1rem     — chữ nội dung chuẩn, input text
-  md: 18,   // 1.125rem — nút bấm chính, tiêu đề nhỏ
-  lg: 20,   // 1.25rem  — icon header, sub-heading
-  xl: 24,   // 1.5rem   — tiêu đề h2 form
-  xxl: 28,  // 1.75rem  — tiêu đề card lớn
-  xxxl: 32, // 2rem     — tiêu đề h1 dashboard
+  xs: 12,
+  sm: 14,
+  base: 16,
+  md: 18,
+  lg: 20,
+  xl: 24,
+  xxl: 28,
+  xxxl: 32,
 } as const;
 
 export const fontWeights = {
@@ -20,7 +20,7 @@ export const fonts = {
   size: fontSizes,
   weight: fontWeights,
   family: {
-    sans: 'Inter', // Cài đặt nếu dùng @expo-google-fonts/inter
+    sans: 'Inter',
   },
 } as const;
 

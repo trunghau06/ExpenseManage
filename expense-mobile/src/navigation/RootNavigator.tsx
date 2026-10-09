@@ -1,6 +1,9 @@
-import React, { useEffect } from 'react';
+import React, {
+  useEffect,
+} from 'react';
 import {
   ActivityIndicator,
+  StyleSheet,
   View,
 } from 'react-native';
 import {
@@ -16,7 +19,7 @@ import {
 
 import Login from '../screens/Login';
 import Register from '../screens/Register';
-import Dashboard from '../screens/Dashboard';
+import MainTabNavigator from './MainTabNavigator';
 
 import {
   restoreLogin,
@@ -27,23 +30,27 @@ import {
   RootState,
 } from '../store/store';
 
+import { colors } from '../theme/colors';
+
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
-  Dashboard: undefined;
+  Main: undefined;
 };
 
 const Stack =
   createNativeStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch =
+    useDispatch<AppDispatch>();
 
   const {
     isAuthenticated,
     isRestoring,
   } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) =>
+      state.auth
   );
 
   useEffect(() => {
@@ -53,15 +60,13 @@ export default function RootNavigator() {
   if (isRestoring) {
     return (
       <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
+        style={
+          styles.rootNavigator__loading
+        }
       >
         <ActivityIndicator
           size="large"
-          color="#1E40AF"
+          color={colors.primary}
         />
       </View>
     );
@@ -88,11 +93,24 @@ export default function RootNavigator() {
           </>
         ) : (
           <Stack.Screen
-            name="Dashboard"
-            component={Dashboard}
+            name="Main"
+            component={
+              MainTabNavigator
+            }
           />
         )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  rootNavigator__loading: {
+    flex: 1,
+    justifyContent:
+      'center',
+    alignItems: 'center',
+    backgroundColor:
+      colors.bg,
+  },
+});
