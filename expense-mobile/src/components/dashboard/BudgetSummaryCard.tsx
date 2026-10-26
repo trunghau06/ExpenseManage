@@ -16,6 +16,7 @@ interface BudgetSummaryCardProps {
   spent?: string | null;
   limit?: string | null;
   progress?: number | null;
+  onViewAll?: () => void;
 }
 
 export default function BudgetSummaryCard({
@@ -23,6 +24,7 @@ export default function BudgetSummaryCard({
   spent,
   limit,
   progress,
+  onViewAll,
 }: BudgetSummaryCardProps) {
   if (
     !name ||
@@ -34,6 +36,7 @@ export default function BudgetSummaryCard({
       <SectionCard
         title="Ngân sách"
         rightText="Xem tất cả"
+        onRightPress={onViewAll}
       >
         <EmptyState />
       </SectionCard>
@@ -52,6 +55,7 @@ export default function BudgetSummaryCard({
     <SectionCard
       title="Ngân sách"
       rightText="Xem tất cả"
+      onRightPress={onViewAll}
     >
       <View style={styles.budgetSummaryCard__header}>
         <Text style={styles.budgetSummaryCard__name}>

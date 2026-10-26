@@ -16,6 +16,13 @@ interface ActionItem {
   icon: keyof typeof Feather.glyphMap;
 }
 
+interface QuickActionsProps {
+  onTransactionsPress: () => void;
+  onBudgetPress: () => void;
+  onStatPress: () => void;
+  onGoalPress: () => void;
+}
+
 const actions: ActionItem[] = [
   {
     id: 'transaction',
@@ -28,18 +35,24 @@ const actions: ActionItem[] = [
     icon: 'credit-card',
   },
   {
-    id: 'report',
+    id: 'stat',
     label: 'Báo cáo',
     icon: 'bar-chart-2',
   },
   {
-    id: 'saving',
+    id: 'goal',
     label: 'Mục tiêu',
     icon: 'target',
   },
 ];
 
-export default function QuickActions() {
+export default function QuickActions(
+  { 
+    onTransactionsPress,
+    onBudgetPress,
+    onStatPress,
+    onGoalPress,
+  } : QuickActionsProps) {
   return (
     <View style={styles.quickActions}>
       {actions.map((item) => (
@@ -47,6 +60,17 @@ export default function QuickActions() {
           key={item.id}
           style={styles.quickActions__item}
           activeOpacity={0.8}
+          onPress={
+            item.id === 'transaction'
+              ? onTransactionsPress
+              : item.id === 'budget'
+                ? onBudgetPress
+                : item.id === 'stat'
+                  ? onStatPress
+                  : item.id === 'goal'
+                    ? onGoalPress
+                    : undefined
+          }
         >
           <View style={styles.quickActions__icon}>
             <Feather

@@ -29,9 +29,15 @@ export const colors = {
     '#1D4ED8',
   ] as const,
 
+  balanceGradient: [
+    '#15379A',
+    '#2458B8',
+    '#08758A',
+  ] as const,
+
   shadowPrimary: 'rgba(37, 99, 235, 0.35)',
   shadowCard: 'rgba(0, 30, 90, 0.08)',
-  focusRing: 'rgba(30, 64, 175, 0.12)',
+  focusRing: 'rgba(255, 255, 255, 0.16)',
 } as const;
 
 export type Colors = typeof colors;

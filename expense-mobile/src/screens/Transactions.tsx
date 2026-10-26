@@ -1,34 +1,34 @@
-import React, {
-  useState,
-} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
-import {
-  SafeAreaView,
-} from 'react-native-safe-area-context';
+import React, { useState } from "react";
+import { ScrollView, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import SectionHeader from '../components/ui/SectionHeader';
-import TransactionsHero from '../components/transactions/TransactionsHero';
-import TransactionsMetrics from '../components/transactions/TransactionsMetrics';
+import { colors } from "../theme/colors";
+
+import SectionHeader from "../components/ui/SectionHeader";
+import TransactionsHero from "../components/transactions/TransactionsHero";
+import TransactionsMetrics from "../components/transactions/TransactionsMetrics";
 import TransactionsFilter, {
   TransactionFilterType,
-} from '../components/transactions/TransactionsFilter';
-import TransactionsList from '../components/transactions/TransactionsList';
+} from "../components/transactions/TransactionsFilter";
+import TransactionsList from "../components/transactions/TransactionsList";
+import AddTransaction from "./AddTransaction";
 
-import { colors } from '../theme/colors';
+type TransactionsStackParamList = {
+  TransactionsHome: undefined;
+  AddTransaction: undefined;
+};
 
-export default function Transactions() {
-  const [
-    search,
-    setSearch,
-  ] = useState('');
+interface TransactionsHomeProps {
+  onAddPress: () => void;
+  refreshKey: number;
+}
 
-  const [
-    type,
-    setType,
-  ] = useState<TransactionFilterType>('ALL');
+const Stack = createNativeStackNavigator<TransactionsStackParamList>();
+
+function TransactionsHome({ onAddPress, refreshKey }: TransactionsHomeProps) {
+  const [search, setSearch] = useState("");
+  const [type, setType] = useState<TransactionFilterType>("ALL");
 
   return (
     <SafeAreaView style={styles.transactions}>
@@ -37,19 +37,47 @@ export default function Transactions() {
         showsVerticalScrollIndicator={false}
       >
         <SectionHeader />
-        <TransactionsHero />
-        <TransactionsMetrics />
-
+        <TransactionsHero onAddPress={onAddPress} />
+        <TransactionsMetrics key={`metrics-${refreshKey}`} />
         <TransactionsFilter
           search={search}
           type={type}
           onSearchChange={setSearch}
           onTypeChange={setType}
         />
-
-        <TransactionsList />
+        <TransactionsList key={`list-${refreshKey}`} />
+        
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+export default function Transactions() {
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="TransactionsHome">
+        {({ navigation }) => (
+          <TransactionsHome
+            refreshKey={refreshKey}
+            onAddPress={() => navigation.navigate("AddTransaction")}
+          />
+        )}
+      </Stack.Screen>
+
+      <Stack.Screen name="AddTransaction">
+        {({ navigation }) => (
+          <AddTransaction
+            onBack={() => navigation.goBack()}
+            onSuccess={() => {
+              setRefreshKey((prev) => prev + 1);
+              navigation.goBack();
+            }}
+          />
+        )}
+      </Stack.Screen>
+    </Stack.Navigator>
   );
 }
 

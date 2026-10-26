@@ -12,7 +12,6 @@ import { colors } from '../../theme/colors';
 import { fonts } from '../../theme/fonts';
 
 interface SectionHeaderProps {
-  title: string;
   avatarUri?: string | null;
   onNotificationPress?: () => void;
   onAccountPress?: () => void;

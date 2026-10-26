@@ -11,28 +11,31 @@ import SectionCard from '../ui/SectionCard';
 
 import { colors } from '../../theme/colors';
 import { fonts } from '../../theme/fonts';
-
+const INCOME_TYPE = "INCOME";
 interface TransactionItem {
   id: string;
   name: string;
   category: string;
   amount: string;
   time: string;
-  type: 'INCOME' | 'EXPENSE';
+  type: 'INCOME' | 'EXPENSE'; 
 }
 
 interface RecentTransactionsCardProps {
   items?: TransactionItem[];
+  onViewAll?: () => void;
 }
 
 export default function RecentTransactionsCard({
   items = [],
+  onViewAll,
 }: RecentTransactionsCardProps) {
   if (items.length === 0) {
     return (
       <SectionCard
         title="Giao dịch gần đây"
         rightText="Xem tất cả"
+        onRightPress={onViewAll}
       >
         <EmptyState />
       </SectionCard>
@@ -43,11 +46,12 @@ export default function RecentTransactionsCard({
     <SectionCard
       title="Giao dịch gần đây"
       rightText="Xem tất cả"
+      onRightPress={onViewAll}
     >
       <View style={styles.recentTransactionsCard__list}>
         {items.map((item) => {
           const isIncome =
-            item.type === 'INCOME';
+            item.type === INCOME_TYPE;
 
           return (
             <View
@@ -55,18 +59,6 @@ export default function RecentTransactionsCard({
               style={styles.recentTransactionsCard__item}
             >
               <View style={styles.recentTransactionsCard__left}>
-                <View style={styles.recentTransactionsCard__icon}>
-                  <Feather
-                    name={
-                      isIncome
-                        ? 'arrow-down-left'
-                        : 'arrow-up-right'
-                    }
-                    size={17}
-                    color={colors.primary}
-                  />
-                </View>
-
                 <View style={styles.recentTransactionsCard__info}>
                   <Text
                     style={styles.recentTransactionsCard__name}
@@ -123,15 +115,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-  },
-
-  recentTransactionsCard__icon: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.focusRing,
   },
 
   recentTransactionsCard__info: {

@@ -4,6 +4,7 @@ import React, {
 import {
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -14,12 +15,14 @@ interface SectionCardProps {
   title: string;
   children: ReactNode;
   rightText?: string;
+  onRightPress?: () => void;
 }
 
 export default function SectionCard({
   title,
   children,
   rightText,
+  onRightPress,
 }: SectionCardProps) {
   return (
     <View style={styles.sectionCard}>
@@ -28,11 +31,13 @@ export default function SectionCard({
           {title}
         </Text>
 
-        {rightText ? (
-          <Text style={styles.sectionCard__rightText}>
-            {rightText}
-          </Text>
-        ) : null}
+        {rightText && (
+          <TouchableOpacity onPress={onRightPress} disabled={!onRightPress}>
+            <Text style={styles.sectionCard__rightText}>
+              {rightText}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {children}
@@ -74,5 +79,6 @@ const styles = StyleSheet.create({
     fontSize: fonts.size.xs,
     fontWeight: fonts.weight.medium,
     color: colors.primary,
+    marginTop: 2,
   },
 });
