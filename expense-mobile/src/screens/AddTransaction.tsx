@@ -43,7 +43,7 @@ export default function AddTransaction({
   onBack,
   onSuccess,
 }: AddTransactionProps) {
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<React.ElementRef<typeof ScrollView>>(null);
 
   const [type, setType] = useState<TransactionType>("EXPENSE");
   const [amount, setAmount] = useState("");

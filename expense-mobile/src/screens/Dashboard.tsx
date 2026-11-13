@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useIsFocused } from "@react-navigation/native";
-
+import { useFocusEffect } from "@react-navigation/native";
 import axiosClient from "../api/axiosClient";
 import { colors } from "../theme/colors";
 import { fonts } from "../theme/fonts";
 import { formatDate } from "../utils/formatDate";
-
 import SectionHeader from "../components/ui/SectionHeader";
 import SectionCard from "../components/ui/SectionCard";
 import EmptyState from "../components/ui/EmptyState";
@@ -25,12 +30,12 @@ import SavingsGoal from "./SavingsGoal";
 
 type DashboardStackParamList = {
   DashboardHome: undefined;
-  Budget: undefined;
+  Budget: { month: number; year: number };
   SavingGoal: undefined;
 };
 
 interface DashboardHomeProps {
-  onBudgetPress: () => void;
+  onBudgetPress: (month: number, year: number) => void;
   onTransactionsPress: () => void;
   onStatPress: () => void;
   onGoalPress: () => void;
@@ -49,16 +54,21 @@ interface TransactionData {
   } | null;
 }
 
+interface BudgetData {
+  category_id: string | number;
+  amount: number | string;
+}
+
+interface SavingsGoalData {
+  title: string;
+  target_amount: number | string;
+}
+
 interface ExpenseItem {
   id: string;
   name: string;
   amount: string;
   percent: number;
-}
-
-interface BudgetData {
-  category_id: string | number;
-  amount: number | string;
 }
 
 interface BudgetSummary {
@@ -77,12 +87,8 @@ interface RecentTransactionItem {
   type: "INCOME" | "EXPENSE";
 }
 
-interface SavingsGoalData {
-  title: string;
-  target_amount: number | string;
-}
-
 const Stack = createNativeStackNavigator<DashboardStackParamList>();
+const formatMoney = (value: number) => `${value.toLocaleString("vi-VN")} đ`;
 
 function DashboardHome({
   onBudgetPress,
@@ -92,250 +98,224 @@ function DashboardHome({
 }: DashboardHomeProps) {
   const [period, setPeriod] = useState<DashboardPeriod>("current");
   const [balance, setBalance] = useState<number | null>(null);
-  const [totalBalance, setTotalBalance] = useState<number>(0);  
+  const [totalBalance, setTotalBalance] = useState(0);
   const [income, setIncome] = useState<number | null>(null);
   const [expense, setExpense] = useState<number | null>(null);
-
   const [expenseItems, setExpenseItems] = useState<ExpenseItem[]>([]);
-  const [budgetSummary, setBudgetSummary] =
-    useState<BudgetSummary | null>(null);
-  const [recentTransactions, setRecentTransactions] =
-    useState<RecentTransactionItem[]>([]);
-  const [savingsGoal, setSavingsGoal] =
-    useState<SavingsGoalData | null>(null);
+  const [budgetSummary, setBudgetSummary] = useState<BudgetSummary | null>(
+    null,
+  );
+  const [recentTransactions, setRecentTransactions] = useState<
+    RecentTransactionItem[]
+  >([]);
+  const [savingsGoal, setSavingsGoal] = useState<SavingsGoalData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
-  const isFocused = useIsFocused();
+  const now = new Date();
+  const selectedDate =
+    period === "previous"
+      ? new Date(now.getFullYear(), now.getMonth() - 1, 1)
+      : now;
+  const month = selectedDate.getMonth() + 1;
+  const year = selectedDate.getFullYear();
   const periodLabel = period === "current" ? "Tháng này" : "Tháng trước";
 
-  useEffect(() => {
-    if (!isFocused) return;
-    let active = true;
-    const fetchDashboard = async () => {
-      try {
-        const now = new Date();
-        const selectedDate =
-          period === "previous"
-            ? new Date(now.getFullYear(), now.getMonth() - 1, 1)
-            : now;
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
 
-        const month = selectedDate.getMonth() + 1;
-        const year = selectedDate.getFullYear();
+      const fetchDashboard = async () => {
+        setLoading(true);
 
-        const [transRes, budgetRes, goalRes, balanceRes] = await Promise.all([
-          axiosClient.get(`/transactions?month=${month}&year=${year}`),
-          axiosClient.get(`/budgets?month=${month}&year=${year}`),
-          axiosClient.get("/savings-goals"),
-          axiosClient.get("/balance"),
-        ]);
+        try {
+          const [transRes, budgetRes, goalRes, balanceRes] = await Promise.all([
+            axiosClient.get(`/transactions?month=${month}&year=${year}`),
+            axiosClient.get(`/budgets?month=${month}&year=${year}`),
+            axiosClient.get("/savings-goals"),
+            axiosClient.get("/balance"),
+          ]);
 
-        if (!active) return;
+          if (!active) return;
 
-        const summary = transRes.data?.summary;
+          const summary = transRes.data?.summary ?? {};
+          const transactions: TransactionData[] =
+            transRes.data?.transactions ?? [];
+          const budgets: BudgetData[] = Array.isArray(budgetRes.data)
+            ? budgetRes.data
+            : (budgetRes.data?.budgets ?? []);
 
-        const transactions: TransactionData[] =
-          transRes.data?.transactions ?? [];
+          const totalIncome = Number(summary.totalIncome ?? 0);
+          const totalExpense = Number(summary.totalExpense ?? 0);
 
-        const budgets: BudgetData[] = Array.isArray(budgetRes.data)
-          ? budgetRes.data
-          : budgetRes.data?.budgets ?? [];
+          setBalance(Number(summary.balance ?? 0));
+          setIncome(totalIncome);
+          setExpense(totalExpense);
+          setTotalBalance(Number(balanceRes.data?.currentBalance ?? 0));
 
-        const totalIncome = Number(summary?.totalIncome ?? 0);
-        const totalExpense = Number(summary?.totalExpense ?? 0);
-        const currentBalance = Number(summary?.balance ?? 0);
+          const grouped = new Map<string, number>();
 
-        setBalance(currentBalance);
-        setIncome(totalIncome);
-        setExpense(totalExpense);
-        setTotalBalance(Number(balanceRes.data?.currentBalance ?? 0));  
+          transactions
+            .filter((item) => item.type === "EXPENSE")
+            .forEach((item) => {
+              const name = item.category?.name || "Khác";
+              const amount = Number(item.amount);
 
-        const grouped: { name: string; amount: number }[] = [];
+              if (!Number.isFinite(amount) || amount <= 0) return;
+              grouped.set(name, (grouped.get(name) ?? 0) + amount);
+            });
 
-        transactions
-          .filter((item) => item.type === "EXPENSE")
-          .forEach((item) => {
-            const name = item.category?.name || "Khác";
-            const amount = Number(item.amount);
+          const expenses: ExpenseItem[] = [...grouped.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .map(([name, amount]) => ({
+              id: name,
+              name,
+              amount: formatMoney(amount),
+              percent:
+                totalExpense > 0
+                  ? Math.round((amount / totalExpense) * 100)
+                  : 0,
+            }));
 
-            if (!Number.isFinite(amount) || amount <= 0) return;
+          setExpenseItems(expenses);
 
-            const existing = grouped.find(
-              (category) => category.name === name
-            );
+          const recent: RecentTransactionItem[] = [...transactions]
+            .filter((item) => item.type === "INCOME" || item.type === "EXPENSE")
+            .sort(
+              (a, b) =>
+                new Date(b.transaction_date).getTime() -
+                new Date(a.transaction_date).getTime(),
+            )
+            .slice(0, 5)
+            .map((item) => ({
+              id: String(item.id),
+              name: item.note?.trim() || item.category?.name || "Giao dịch",
+              category: item.category?.name || "Khác",
+              amount: `${item.type === "INCOME" ? "+" : "-"}${formatMoney(Number(item.amount))}`,
+              time: new Date(item.transaction_date).toLocaleDateString("vi-VN"),
+              type: item.type as "INCOME" | "EXPENSE",
+            }));
 
-            if (existing) {
-              existing.amount += amount;
-            } else {
-              grouped.push({ name, amount });
-            }
-          });
+          setRecentTransactions(recent);
 
-        const items: ExpenseItem[] = grouped
-          .sort((a, b) => b.amount - a.amount)
-          .map((item) => ({
-            id: item.name,
-            name: item.name,
-            amount: `${item.amount.toLocaleString("vi-VN")} đ`,
-            percent:
-              totalExpense > 0
-                ? Math.round((item.amount / totalExpense) * 100)
-                : 0,
-          }));
-
-        setExpenseItems(items);
-
-        const recent: RecentTransactionItem[] = [...transactions]
-          .filter(
-            (item) =>
-              item.type === "INCOME" || item.type === "EXPENSE"
-          )
-          .sort(
-            (a, b) =>
-              new Date(b.transaction_date).getTime() -
-              new Date(a.transaction_date).getTime()
-          )
-          .slice(0, 5)
-          .map((item) => ({
-            id: String(item.id),
-            name:
-              item.note?.trim() ||
-              item.category?.name ||
-              "Giao dịch",
-            category: item.category?.name || "Khác",
-            amount: `${
-              item.type === "INCOME" ? "+" : "-"
-            }${Number(item.amount).toLocaleString("vi-VN")} đ`,
-            time: new Date(item.transaction_date).toLocaleDateString(
-              "vi-VN"
-            ),
-            type: item.type as "INCOME" | "EXPENSE",
-          }));
-
-        setRecentTransactions(recent);
-
-        const totalLimit = budgets.reduce(
-          (sum, item) => sum + Number(item.amount),
-          0
-        );
-
-        const totalSpent = transactions
-          .filter(
-            (item) =>
-              item.type === "EXPENSE" &&
-              budgets.some(
-                (budget) =>
-                  String(budget.category_id) ===
-                  String(item.category_id ?? item.category?.id)
-              )
-          )
-          .reduce(
-            (sum, item) => sum + Number(item.amount),
-            0
+          const totalLimit = budgets.reduce(
+            (sum, item) => sum + Number(item.amount || 0),
+            0,
           );
 
-        if (budgets.length > 0 && totalLimit > 0) {
-          setBudgetSummary({
-            name: "Tiến độ ngân sách",
-            spent: `${totalSpent.toLocaleString("vi-VN")} đ`,
-            limit: `${totalLimit.toLocaleString("vi-VN")} đ`,
-            progress: Math.round((totalSpent / totalLimit) * 100),
-          });
-        } else {
+          const budgetCategories = new Set(
+            budgets.map((item) => String(item.category_id)),
+          );
+
+          const totalSpent = transactions
+            .filter(
+              (item) =>
+                item.type === "EXPENSE" &&
+                budgetCategories.has(
+                  String(item.category_id ?? item.category?.id),
+                ),
+            )
+            .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+
+          setBudgetSummary(
+            budgets.length > 0 && totalLimit > 0
+              ? {
+                  name: "Tiến độ ngân sách",
+                  spent: formatMoney(totalSpent),
+                  limit: formatMoney(totalLimit),
+                  progress: Math.round((totalSpent / totalLimit) * 100),
+                }
+              : null,
+          );
+
+          const goalData: SavingsGoalData | null =
+            goalRes.data?.goal ?? goalRes.data;
+
+          setSavingsGoal(
+            goalData &&
+              !Array.isArray(goalData) &&
+              goalData.target_amount != null
+              ? goalData
+              : null,
+          );
+        } catch (error) {
+          if (!active) return;
+
+          console.log("Lỗi tải Dashboard:", error);
+          setBalance(null);
+          setIncome(null);
+          setExpense(null);
+          setExpenseItems([]);
           setBudgetSummary(null);
-        }
-        const goalData: SavingsGoalData | null =
-          goalRes.data?.goal ?? goalRes.data;
-        if (
-          goalData &&
-          !Array.isArray(goalData) &&
-          goalData.target_amount != null
-        ) {
-          setSavingsGoal(goalData);
-        } else {
+          setRecentTransactions([]);
           setSavingsGoal(null);
+        } finally {
+          if (active) {
+            setLoading(false);
+            setRefreshing(false);
+          }
         }
-      } catch (err) {
-        if (!active) return;
-        console.log("Lỗi tải Dashboard:", err);
-        setBalance(null);
-        setIncome(null);
-        setExpense(null);
-        setExpenseItems([]);
-        setBudgetSummary(null);
-        setRecentTransactions([]);
-        setSavingsGoal(null);
-      }
-    };
+      };
 
-    fetchDashboard();
+      fetchDashboard();
+      return () => {
+        active = false;
+      };
+    }, [month, year, reloadKey]),
+  );
 
-    return () => {
-      active = false;
-    };
-  }, [period, isFocused]);
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setReloadKey((value) => value + 1);
+  };
 
   const goalTarget = Number(savingsGoal?.target_amount ?? 0);
   const goalSaved = Math.max(totalBalance, 0);
-
   const goalPercent =
     goalTarget > 0
       ? Math.min(Math.round((goalSaved / goalTarget) * 100), 100)
       : 0;
 
   return (
-    <SafeAreaView style={styles.dashboard}>
+    <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.dashboard__content}
+        contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[colors.primary]}
+          />
+        }
       >
         <SectionHeader />
-
-        <View style={styles.dashboard__greeting}>
-          <Text style={styles.dashboard__greetingTitle}>
-            Tổng Quan Giao Dịch
-          </Text>
-
-          <Text style={styles.dashboard__greetingSubtitle}>
-            {formatDate()}
-          </Text>
+        <View style={styles.greeting}>
+          <Text style={styles.title}>Tổng Quan Giao Dịch</Text>
+          <Text style={styles.subtitle}>{formatDate()}</Text>
         </View>
-
         <BalanceSummaryCard
           period={period}
-          balance={
-            balance !== null
-              ? `${balance.toLocaleString("vi-VN")} đ`
-              : null
-          }
-          income={
-            income !== null
-              ? `${income.toLocaleString("vi-VN")} đ`
-              : null
-          }
-          expense={
-            expense !== null
-              ? `${expense.toLocaleString("vi-VN")} đ`
-              : null
-          }
+          balance={balance !== null ? formatMoney(balance) : null}
+          income={income !== null ? formatMoney(income) : null}
+          expense={expense !== null ? formatMoney(expense) : null}
         />
-
         <PeriodTabs value={period} onChange={setPeriod} />
         <QuickActions
           onTransactionsPress={onTransactionsPress}
-          onBudgetPress={onBudgetPress}
+          onBudgetPress={() => onBudgetPress(month, year)}
           onStatPress={onStatPress}
           onGoalPress={onGoalPress}
         />
+        {loading && <ActivityIndicator size="small" color={colors.primary} />}
         <ExpenseAllocationCard
           periodLabel={periodLabel}
           items={expenseItems}
-          total={
-            expense !== null
-              ? `${expense.toLocaleString("vi-VN")} đ`
-              : null
-          }
+          total={expense !== null ? formatMoney(expense) : null}
         />
         <BudgetSummaryCard
-          onViewAll={onBudgetPress}
+          onViewAll={() => onBudgetPress(month, year)}
           name={budgetSummary?.name}
           spent={budgetSummary?.spent}
           limit={budgetSummary?.limit}
@@ -349,57 +329,32 @@ function DashboardHome({
           {!savingsGoal ? (
             <EmptyState text="Chưa có mục tiêu tiết kiệm" />
           ) : (
-            <View style={styles.dashboard__goal}>
-              <Text style={styles.dashboard__goalName}>
+            <View style={styles.goal}>
+              <Text style={styles.goalName}>
                 {savingsGoal.title || "Mục tiêu tiết kiệm"}
               </Text>
-
-              <Text style={styles.dashboard__goalAmount}>
-                {goalTarget.toLocaleString("vi-VN")} đ
-              </Text>
-
-              <View style={styles.dashboard__goalRow}>
-                <Text style={styles.dashboard__goalLabel}>
-                  Tiến độ hoàn thành
-                </Text>
-
-                <Text style={styles.dashboard__goalPercent}>
-                  {goalPercent}%
-                </Text>
+              <Text style={styles.goalAmount}>{formatMoney(goalTarget)}</Text>
+              <View style={styles.row}>
+                <Text style={styles.label}>Tiến độ hoàn thành</Text>
+                <Text style={styles.percent}>{goalPercent}%</Text>
               </View>
-
-              <View style={styles.dashboard__goalTrack}>
+              <View style={styles.track}>
                 <View
                   style={[
-                    styles.dashboard__goalFill,
-                    {
-                      width: `${goalPercent}%` as `${number}%`,
-                    },
+                    styles.fill,
+                    { width: `${goalPercent}%` as `${number}%` },
                   ]}
                 />
               </View>
-
-              <View style={styles.dashboard__goalRow}>
+              <View style={styles.row}>
                 <View>
-                  <Text style={styles.dashboard__goalLabel}>
-                    Đã tích lũy
-                  </Text>
-
-                  <Text style={styles.dashboard__goalValue}>
-                    {goalSaved.toLocaleString("vi-VN")} đ
-                  </Text>
+                  <Text style={styles.label}>Đã tích lũy</Text>
+                  <Text style={styles.value}>{formatMoney(goalSaved)}</Text>
                 </View>
-
-                <View>
-                  <Text style={styles.dashboard__goalLabel}>
-                    Còn thiếu
-                  </Text>
-
-                  <Text style={styles.dashboard__goalValue}>
-                    {Math.max(
-                      goalTarget - goalSaved,
-                      0
-                    ).toLocaleString("vi-VN")} đ
+                <View style={styles.right}>
+                  <Text style={styles.label}>Còn thiếu</Text>
+                  <Text style={styles.value}>
+                    {formatMoney(Math.max(goalTarget - goalSaved, 0))}
                   </Text>
                 </View>
               </View>
@@ -421,113 +376,102 @@ export default function Dashboard() {
       <Stack.Screen name="DashboardHome">
         {({ navigation }) => (
           <DashboardHome
-            onBudgetPress={() => navigation.navigate("Budget")}
+            onBudgetPress={(month, year) =>
+              navigation.navigate("Budget", { month, year })
+            }
             onTransactionsPress={() =>
               navigation.getParent()?.navigate("Transactions")
             }
-            onStatPress={() =>
-              navigation.getParent()?.navigate("Stats")
-            }
+            onStatPress={() => navigation.getParent()?.navigate("Stats")}
             onGoalPress={() => navigation.navigate("SavingGoal")}
           />
         )}
       </Stack.Screen>
-
       <Stack.Screen name="Budget">
-        {({ navigation }) => (
-          <Budget onBack={() => navigation.goBack()} />
+        {({ navigation, route }) => (
+          <Budget
+            onBack={() => navigation.goBack()}
+            initialMonth={route.params.month}
+            initialYear={route.params.year}
+          />
         )}
       </Stack.Screen>
-
       <Stack.Screen name="SavingGoal">
-        {({ navigation }) => (
-          <SavingsGoal onBack={() => navigation.goBack()} />
-        )}
+        {({ navigation }) => <SavingsGoal onBack={() => navigation.goBack()} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
 }
 
 const styles = StyleSheet.create({
-  dashboard: {
+  container: {
     flex: 1,
     backgroundColor: colors.bg,
   },
-
-  dashboard__content: {
+  content: {
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 100,
     gap: 16,
   },
-
-  dashboard__greeting: {
+  greeting: {
     gap: 4,
   },
-
-  dashboard__greetingTitle: {
+  title: {
     fontSize: fonts.size.lg,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
-
-  dashboard__greetingSubtitle: {
+  subtitle: {
     fontSize: fonts.size.sm,
-    fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
-
-  dashboard__goal: {
+  goal: {
     gap: 8,
   },
-
-  dashboard__goalName: {
+  goalName: {
     fontSize: fonts.size.base,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
-
-  dashboard__goalLabel: {
-    fontSize: fonts.size.sm,
-    color: colors.textMuted,
-  },
-
-  dashboard__goalAmount: {
+  goalAmount: {
     fontSize: fonts.size.xxl,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
   },
-
-  dashboard__goalRow: {
+  row: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
   },
-
-  dashboard__goalPercent: {
+  label: {
+    fontSize: fonts.size.sm,
+    color: colors.textMuted,
+  },
+  percent: {
     fontSize: fonts.size.sm,
     fontWeight: fonts.weight.semiBold,
     color: colors.primary,
   },
-
-  dashboard__goalTrack: {
+  track: {
     height: 8,
     backgroundColor: colors.border,
     borderRadius: 8,
     overflow: "hidden",
   },
-
-  dashboard__goalFill: {
+  fill: {
     height: "100%",
     backgroundColor: colors.primary,
     borderRadius: 8,
   },
-
-  dashboard__goalValue: {
+  value: {
     fontSize: fonts.size.base,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginTop: 4,
+  },
+  right: {
+    alignItems: "flex-end",
   },
 });

@@ -15,6 +15,7 @@ export type StatPeriod =
   | '1Y';
 
 interface StatHeroProps {
+  subtitle?: string;
   period: StatPeriod;
   onPeriodChange: (
     value: StatPeriod
@@ -24,6 +25,7 @@ interface StatHeroProps {
 export default function StatHero({
   period,
   onPeriodChange,
+  subtitle,
 }: StatHeroProps) {
   return (
     <View style={styles.statHero}>
@@ -33,7 +35,7 @@ export default function StatHero({
         </Text>
 
         <Text style={styles.statHero__subtitle}>
-          Tháng 10
+          {subtitle || 'Tổng quan thu chi'}
         </Text>
       </View>
 
