@@ -1,11 +1,19 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import Constants from 'expo-constants';
 
-const DEV_IP = '172.16.0.74';
+const hostUri =
+  Constants.expoConfig?.hostUri;
+
+const DEV_IP =
+  hostUri?.split(':')[0] ||
+  'localhost';
 
 let authToken: string | null = null;
 
-export const setAuthToken = (token: string | null) => {
+export const setAuthToken = (
+  token: string | null
+) => {
   authToken = token;
 };
 
@@ -14,16 +22,19 @@ const axiosClient = axios.create({
   timeout: 10000,
 });
 
-axiosClient.interceptors.request.use(async (config) => {
-  const token =
-    authToken ||
-    (await SecureStore.getItemAsync('token'));
+axiosClient.interceptors.request.use(
+  async (config) => {
+    const token =
+      authToken ||
+      (await SecureStore.getItemAsync('token'));
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+      config.headers.Authorization =
+        `Bearer ${token}`;
+    }
+
+    return config;
   }
-
-  return config;
-});
+);
 
 export default axiosClient;

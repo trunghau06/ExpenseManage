@@ -1,5 +1,4 @@
 export const colors = {
-  // Màu chủ đạo & Chức năng
   primary: '#1E40AF',
   primaryHover: '#172554',
   secondary: '#38BDF8',
@@ -7,7 +6,6 @@ export const colors = {
   expense: '#EF4444',
   neutral: '#64748B',
 
-  // Nền, Khung & Chữ
   bg: '#F5F5F5',
   surface: '#FFFFFF',
   border: '#E5E7EB',
@@ -15,15 +13,31 @@ export const colors = {
   textMuted: '#6B7280',
   textInverse: '#FFFFFF',
 
-  // Gradient Colors (Dùng với expo-linear-gradient hoặc react-native-linear-gradient)
-  bgAuthGradient: ['#c6daf4', '#FFFFFF', '#baddf5'] as const,
-  btnGradient: ['#1E40AF', '#172554'] as const,
-  iconGradient: ['#2563EB', '#1D4ED8'] as const,
+  bgAuthGradient: [
+    '#C6DAF4',
+    '#FFFFFF',
+    '#BADDF5',
+  ] as const,
 
-  // Shadows
+  btnGradient: [
+    '#1E40AF',
+    '#172554',
+  ] as const,
+
+  iconGradient: [
+    '#2563EB',
+    '#1D4ED8',
+  ] as const,
+
+  balanceGradient: [
+    '#15379A',
+    '#2458B8',
+    '#08758A',
+  ] as const,
+
   shadowPrimary: 'rgba(37, 99, 235, 0.35)',
   shadowCard: 'rgba(0, 30, 90, 0.08)',
-  focusRing: 'rgba(30, 64, 175, 0.12)',
+  focusRing: 'rgba(255, 255, 255, 0.16)',
 } as const;
 
 export type Colors = typeof colors;
