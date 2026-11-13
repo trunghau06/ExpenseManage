@@ -92,6 +92,7 @@ function DashboardHome({
 }: DashboardHomeProps) {
   const [period, setPeriod] = useState<DashboardPeriod>("current");
   const [balance, setBalance] = useState<number | null>(null);
+  const [totalBalance, setTotalBalance] = useState<number>(0);  
   const [income, setIncome] = useState<number | null>(null);
   const [expense, setExpense] = useState<number | null>(null);
 
@@ -120,10 +121,11 @@ function DashboardHome({
         const month = selectedDate.getMonth() + 1;
         const year = selectedDate.getFullYear();
 
-        const [transRes, budgetRes, goalRes] = await Promise.all([
+        const [transRes, budgetRes, goalRes, balanceRes] = await Promise.all([
           axiosClient.get(`/transactions?month=${month}&year=${year}`),
           axiosClient.get(`/budgets?month=${month}&year=${year}`),
           axiosClient.get("/savings-goals"),
+          axiosClient.get("/balance"),
         ]);
 
         if (!active) return;
@@ -144,6 +146,7 @@ function DashboardHome({
         setBalance(currentBalance);
         setIncome(totalIncome);
         setExpense(totalExpense);
+        setTotalBalance(Number(balanceRes.data?.currentBalance ?? 0));  
 
         const grouped: { name: string; amount: number }[] = [];
 
@@ -271,7 +274,7 @@ function DashboardHome({
   }, [period, isFocused]);
 
   const goalTarget = Number(savingsGoal?.target_amount ?? 0);
-  const goalSaved = Math.max(balance ?? 0, 0);
+  const goalSaved = Math.max(totalBalance, 0);
 
   const goalPercent =
     goalTarget > 0
@@ -351,10 +354,6 @@ function DashboardHome({
                 {savingsGoal.title || "Mục tiêu tiết kiệm"}
               </Text>
 
-              <Text style={styles.dashboard__goalLabel}>
-                Số tiền mục tiêu
-              </Text>
-
               <Text style={styles.dashboard__goalAmount}>
                 {goalTarget.toLocaleString("vi-VN")} đ
               </Text>
@@ -383,7 +382,7 @@ function DashboardHome({
               <View style={styles.dashboard__goalRow}>
                 <View>
                   <Text style={styles.dashboard__goalLabel}>
-                    Số dư {periodLabel.toLowerCase()}
+                    Đã tích lũy
                   </Text>
 
                   <Text style={styles.dashboard__goalValue}>
