@@ -1,7 +1,4 @@
-import React, {
-  useRef,
-  useState,
-} from 'react';
+import React, { useRef, useState } from "react";
 
 import {
   ActivityIndicator,
@@ -14,99 +11,62 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
+} from "react-native";
 
-import {
-  SafeAreaView,
-} from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import {
-  useNavigation,
-} from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
-import {
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import {
-  Feather,
-  FontAwesome5,
-} from '@expo/vector-icons';
+import { Feather, FontAwesome5 } from "@expo/vector-icons";
 
-import {
-  LinearGradient,
-} from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
-import {
-  useDispatch,
-} from 'react-redux';
+import { useDispatch } from "react-redux";
 
-import axiosClient, {
-  setAuthToken,
-} from '../api/axiosClient';
+import axiosClient, { setAuthToken } from "../api/axiosClient";
 
-import {
-  loginSuccess,
-} from '../features/auth/authSlice';
+import { loginSuccess } from "../features/auth/authSlice";
 
-import {
-  AppDispatch,
-} from '../store/store';
+import { AppDispatch } from "../store/store";
 
-import {
+import { RootStackParamList } from "../navigation/RootNavigator";
+
+import { colors } from "../theme/colors";
+import { fonts } from "../theme/fonts";
+
+type LoginNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-} from '../navigation/RootNavigator';
-
-import { colors } from '../theme/colors';
-import { fonts } from '../theme/fonts';
-
-type LoginNavigationProp =
-  NativeStackNavigationProp<
-    RootStackParamList,
-    'Login'
-  >;
+  "Login"
+>;
 
 export default function Login() {
-  const navigation =
-    useNavigation<LoginNavigationProp>();
+  const navigation = useNavigation<LoginNavigationProp>();
 
-  const dispatch =
-    useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const [email, setEmail] =
-    useState('');
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState('');
+  const [password, setPassword] = useState("");
 
-  const [
-    showPassword,
-    setShowPassword,
-  ] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [
-    rememberMe,
-    setRememberMe,
-  ] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [error, setError] =
-    useState('');
+  const [error, setError] = useState("");
 
-  const passwordInputRef =
-    useRef<TextInput>(null);
+  const passwordInputRef = useRef<React.ElementRef<typeof TextInput>>(null);
 
   const handleSubmit = async () => {
-    setError('');
+    setError("");
 
     if (!email.trim() || !password) {
-      setError(
-        'Vui lòng nhập đầy đủ email và mật khẩu'
-      );
+      setError("Vui lòng nhập đầy đủ email và mật khẩu");
 
       return;
     }
@@ -114,53 +74,33 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response =
-        await axiosClient.post(
-          '/auth/login',
-          {
-            email: email.trim(),
-            password,
-          }
-        );
+      const response = await axiosClient.post("/auth/login", {
+        email: email.trim(),
+        password,
+      });
 
-      const {
-        token,
-        user,
-      } = response.data;
+      const { token, user } = response.data;
 
       setAuthToken(token);
 
       if (rememberMe) {
-        await SecureStore.setItemAsync(
-          'token',
-          token
-        );
+        await SecureStore.setItemAsync("token", token);
 
-        await SecureStore.setItemAsync(
-          'user',
-          JSON.stringify(user)
-        );
+        await SecureStore.setItemAsync("user", JSON.stringify(user));
       } else {
-        await SecureStore.deleteItemAsync(
-          'token'
-        );
+        await SecureStore.deleteItemAsync("token");
 
-        await SecureStore.deleteItemAsync(
-          'user'
-        );
+        await SecureStore.deleteItemAsync("user");
       }
 
       dispatch(
         loginSuccess({
           token,
           user,
-        })
+        }),
       );
     } catch (err: any) {
-      setError(
-        err.response?.data?.message ||
-          'Đăng nhập thất bại'
-      );
+      setError(err.response?.data?.message || "Đăng nhập thất bại");
     } finally {
       setLoading(false);
     }
@@ -179,49 +119,23 @@ export default function Login() {
       }}
       style={styles.container}
     >
-      <SafeAreaView
-        style={styles.container__safe}
-      >
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="transparent"
-          translucent
-        />
+      <SafeAreaView style={styles.container__safe}>
+        <StatusBar barStyle="dark-content" />
 
         <KeyboardAvoidingView
-          style={
-            styles.container__keyboard
-          }
-          behavior={
-            Platform.OS === 'ios'
-              ? 'padding'
-              : 'height'
-          }
-          keyboardVerticalOffset={
-            Platform.OS === 'ios'
-              ? 0
-              : 20
-          }
+          style={styles.container__keyboard}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
         >
           <ScrollView
-            contentContainerStyle={
-              styles.container__scroll
-            }
-            showsVerticalScrollIndicator={
-              false
-            }
+            contentContainerStyle={styles.container__scroll}
+            showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
           >
-            <View
-              style={
-                styles.formLogin__header
-              }
-            >
+            <View style={styles.formLogin__header}>
               <LinearGradient
-                colors={
-                  colors.iconGradient
-                }
+                colors={colors.iconGradient}
                 start={{
                   x: 0,
                   y: 0,
@@ -230,104 +144,45 @@ export default function Login() {
                   x: 1,
                   y: 1,
                 }}
-                style={
-                  styles.formLogin__logo
-                }
+                style={styles.formLogin__logo}
               >
                 <FontAwesome5
                   name="chart-bar"
                   size={24}
-                  color={
-                    colors.textInverse
-                  }
+                  color={colors.textInverse}
                 />
               </LinearGradient>
 
-              <View
-                style={
-                  styles.formLogin__brandRow
-                }
-              >
-                <Text
-                  style={
-                    styles.formLogin__brandName
-                  }
-                >
-                  FinFlow
-                </Text>
+              <View style={styles.formLogin__brandRow}>
+                <Text style={styles.formLogin__brandName}>FinFlow</Text>
 
-                <View
-                  style={
-                    styles.formLogin__brandDot
-                  }
-                />
+                <View style={styles.formLogin__brandDot} />
               </View>
 
-              <Text
-                style={
-                  styles.formLogin__brandSlogan
-                }
-              >
-                Quản lý tài chính cá nhân
-                thông minh & tối giản
+              <Text style={styles.formLogin__brandSlogan}>
+                Quản lý tài chính cá nhân thông minh & tối giản
               </Text>
             </View>
 
-            <View
-              style={
-                styles.formLogin__greeting
-              }
-            >
-              <Text
-                style={
-                  styles.formLogin__title
-                }
-              >
-                Đăng nhập
-              </Text>
+            <View style={styles.formLogin__greeting}>
+              <Text style={styles.formLogin__title}>Đăng nhập</Text>
 
-              <Text
-                style={
-                  styles.formLogin__subtitle
-                }
-              >
+              <Text style={styles.formLogin__subtitle}>
                 Chào mừng bạn quay trở lại!
               </Text>
             </View>
 
             {error ? (
-              <View
-                style={
-                  styles.formLogin__errorBox
-                }
-              >
-                <Text
-                  style={
-                    styles.formLogin__errorText
-                  }
-                >
-                  {error}
-                </Text>
+              <View style={styles.formLogin__errorBox}>
+                <Text style={styles.formLogin__errorText}>{error}</Text>
               </View>
             ) : null}
 
-            <View
-              style={styles.formLogin}
-            >
-              <View
-                style={styles.inputFrame}
-              >
-                <Text
-                  style={
-                    styles.inputFrame__label
-                  }
-                >
-                  Email
-                </Text>
+            <View style={styles.formLogin}>
+              <View style={styles.inputFrame}>
+                <Text style={styles.inputFrame__label}>Email</Text>
 
-                <View
-                  style={styles.inputWrapper}
-                >
+                <View style={styles.inputWrapper}>
                   <Feather
                     name="mail"
                     size={18}
@@ -338,9 +193,7 @@ export default function Login() {
                   <TextInput
                     style={styles.inputField}
                     placeholder="vidu@email.com"
-                    placeholderTextColor={
-                      colors.textMuted
-                    }
+                    placeholderTextColor={colors.textMuted}
                     keyboardType="email-address"
                     autoCapitalize="none"
                     value={email}
@@ -348,32 +201,20 @@ export default function Login() {
                       setEmail(value);
 
                       if (error) {
-                        setError('');
+                        setError("");
                       }
                     }}
                     returnKeyType="next"
-                    onSubmitEditing={() =>
-                      passwordInputRef.current?.focus()
-                    }
+                    onSubmitEditing={() => passwordInputRef.current?.focus()}
                     blurOnSubmit={false}
                   />
                 </View>
               </View>
 
-              <View
-                style={styles.inputFrame}
-              >
-                <Text
-                  style={
-                    styles.inputFrame__label
-                  }
-                >
-                  Mật khẩu
-                </Text>
+              <View style={styles.inputFrame}>
+                <Text style={styles.inputFrame__label}>Mật khẩu</Text>
 
-                <View
-                  style={styles.inputWrapper}
-                >
+                <View style={styles.inputWrapper}>
                   <Feather
                     name="lock"
                     size={18}
@@ -383,40 +224,25 @@ export default function Login() {
 
                   <TextInput
                     ref={passwordInputRef}
-                    style={[
-                      styles.inputField,
-                      styles.inputFieldPassword,
-                    ]}
+                    style={[styles.inputField, styles.inputFieldPassword]}
                     placeholder="••••••••"
-                    placeholderTextColor={
-                      colors.textMuted
-                    }
-                    secureTextEntry={
-                      !showPassword
-                    }
+                    placeholderTextColor={colors.textMuted}
+                    secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={(value) => {
                       setPassword(value);
 
                       if (error) {
-                        setError('');
+                        setError("");
                       }
                     }}
                     returnKeyType="done"
-                    onSubmitEditing={
-                      handleSubmit
-                    }
+                    onSubmitEditing={handleSubmit}
                   />
 
                   <TouchableOpacity
-                    onPress={() =>
-                      setShowPassword(
-                        !showPassword
-                      )
-                    }
-                    style={
-                      styles.togglePasswordIcon
-                    }
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.togglePasswordIcon}
                     hitSlop={{
                       top: 8,
                       bottom: 8,
@@ -425,35 +251,19 @@ export default function Login() {
                     }}
                   >
                     <Feather
-                      name={
-                        showPassword
-                          ? 'eye-off'
-                          : 'eye'
-                      }
+                      name={showPassword ? "eye-off" : "eye"}
                       size={18}
-                      color={
-                        colors.neutral
-                      }
+                      color={colors.neutral}
                     />
                   </TouchableOpacity>
                 </View>
               </View>
 
-              <View
-                style={
-                  styles.formLogin__options
-                }
-              >
+              <View style={styles.formLogin__options}>
                 <TouchableOpacity
-                  style={
-                    styles.formLogin__remember
-                  }
+                  style={styles.formLogin__remember}
                   activeOpacity={0.8}
-                  onPress={() =>
-                    setRememberMe(
-                      !rememberMe
-                    )
-                  }
+                  onPress={() => setRememberMe(!rememberMe)}
                   hitSlop={{
                     top: 6,
                     bottom: 6,
@@ -464,26 +274,19 @@ export default function Login() {
                   <View
                     style={[
                       styles.formLogin__checkbox,
-                      rememberMe &&
-                        styles.formLogin__checkboxActive,
+                      rememberMe && styles.formLogin__checkboxActive,
                     ]}
                   >
                     {rememberMe && (
                       <Feather
                         name="check"
                         size={14}
-                        color={
-                          colors.textInverse
-                        }
+                        color={colors.textInverse}
                       />
                     )}
                   </View>
 
-                  <Text
-                    style={
-                      styles.formLogin__rememberText
-                    }
-                  >
+                  <Text style={styles.formLogin__rememberText}>
                     Ghi nhớ đăng nhập
                   </Text>
                 </TouchableOpacity>
@@ -496,13 +299,7 @@ export default function Login() {
                     right: 6,
                   }}
                 >
-                  <Text
-                    style={
-                      styles.forgotPasswordLink
-                    }
-                  >
-                    Quên mật khẩu?
-                  </Text>
+                  <Text style={styles.forgotPasswordLink}>Quên mật khẩu?</Text>
                 </TouchableOpacity>
               </View>
 
@@ -518,51 +315,27 @@ export default function Login() {
                 disabled={loading}
               >
                 {loading ? (
-                  <ActivityIndicator
-                    color={
-                      colors.textInverse
-                    }
-                  />
+                  <ActivityIndicator color={colors.textInverse} />
                 ) : (
                   <>
-                    <Text
-                      style={
-                        styles.formLogin__btnText
-                      }
-                    >
-                      Đăng nhập
-                    </Text>
+                    <Text style={styles.formLogin__btnText}>Đăng nhập</Text>
 
                     <Feather
                       name="arrow-right"
                       size={20}
-                      color={
-                        colors.textInverse
-                      }
+                      color={colors.textInverse}
                     />
                   </>
                 )}
               </TouchableOpacity>
 
-              <View
-                style={
-                  styles.formLogin__other
-                }
-              >
-                <Text
-                  style={
-                    styles.formLogin__otherText
-                  }
-                >
-                  Chưa có tài khoản?{' '}
+              <View style={styles.formLogin__other}>
+                <Text style={styles.formLogin__otherText}>
+                  Chưa có tài khoản?{" "}
                 </Text>
 
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate(
-                      'Register'
-                    )
-                  }
+                  onPress={() => navigation.navigate("Register")}
                   hitSlop={{
                     top: 12,
                     bottom: 12,
@@ -570,13 +343,7 @@ export default function Login() {
                     right: 8,
                   }}
                 >
-                  <Text
-                    style={
-                      styles.registerLink
-                    }
-                  >
-                    Đăng ký ngay
-                  </Text>
+                  <Text style={styles.registerLink}>Đăng ký ngay</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -602,20 +369,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 16,
     paddingBottom: 60,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   formLogin__header: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 28,
   },
   formLogin__logo: {
     width: 56,
     height: 56,
     borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor:
-      colors.shadowPrimary,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: colors.shadowPrimary,
     shadowOffset: {
       width: 0,
       height: 6,
@@ -626,8 +392,8 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   formLogin__brandRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
+    flexDirection: "row",
+    alignItems: "baseline",
     marginBottom: 8,
   },
   formLogin__brandName: {
@@ -640,16 +406,14 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor:
-      colors.secondary,
+    backgroundColor: colors.secondary,
     marginLeft: 4,
   },
   formLogin__brandSlogan: {
     fontSize: fonts.size.sm,
-    fontWeight:
-      fonts.weight.regular,
+    fontWeight: fonts.weight.regular,
     color: colors.textMuted,
-    textAlign: 'center',
+    textAlign: "center",
     maxWidth: 260,
     lineHeight: 20,
   },
@@ -664,13 +428,11 @@ const styles = StyleSheet.create({
   },
   formLogin__subtitle: {
     fontSize: fonts.size.sm,
-    fontWeight:
-      fonts.weight.regular,
+    fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
   formLogin__errorBox: {
-    backgroundColor:
-      'rgba(239, 68, 68, 0.1)',
+    backgroundColor: "rgba(239, 68, 68, 0.1)",
     borderWidth: 1,
     borderColor: colors.expense,
     borderRadius: 10,
@@ -680,42 +442,39 @@ const styles = StyleSheet.create({
   formLogin__errorText: {
     color: colors.expense,
     fontSize: fonts.size.sm,
-    fontWeight:
-      fonts.weight.medium,
-    textAlign: 'center',
+    fontWeight: fonts.weight.medium,
+    textAlign: "center",
   },
   formLogin: {
-    width: '100%',
+    width: "100%",
   },
   inputFrame: {
     marginBottom: 16,
   },
   inputFrame__label: {
     fontSize: fonts.size.sm,
-    fontWeight:
-      fonts.weight.semiBold,
+    fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginBottom: 8,
   },
   inputWrapper: {
-    position: 'relative',
-    justifyContent: 'center',
+    position: "relative",
+    justifyContent: "center",
   },
   inputIcon: {
-    position: 'absolute',
+    position: "absolute",
     left: 14,
     zIndex: 1,
   },
   togglePasswordIcon: {
-    position: 'absolute',
+    position: "absolute",
     right: 14,
     padding: 4,
     zIndex: 1,
   },
   inputField: {
     height: 50,
-    backgroundColor:
-      'rgba(255, 255, 255, 0.9)',
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
@@ -728,16 +487,15 @@ const styles = StyleSheet.create({
     paddingRight: 42,
   },
   formLogin__options: {
-    flexDirection: 'row',
-    justifyContent:
-      'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 4,
     marginBottom: 24,
   },
   formLogin__remember: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   formLogin__checkbox: {
@@ -746,39 +504,33 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1.5,
     borderColor: colors.border,
-    backgroundColor:
-      'rgba(255, 255, 255, 0.9)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   formLogin__checkboxActive: {
-    backgroundColor:
-      colors.primary,
+    backgroundColor: colors.primary,
     borderColor: colors.primary,
   },
   formLogin__rememberText: {
     fontSize: fonts.size.sm,
-    fontWeight:
-      fonts.weight.regular,
+    fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
   forgotPasswordLink: {
     fontSize: fonts.size.sm,
-    fontWeight:
-      fonts.weight.semiBold,
+    fontWeight: fonts.weight.semiBold,
     color: colors.primary,
   },
   formLogin__btn: {
     height: 50,
-    backgroundColor:
-      colors.primary,
+    backgroundColor: colors.primary,
     borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     gap: 8,
-    shadowColor:
-      colors.shadowPrimary,
+    shadowColor: colors.shadowPrimary,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -791,24 +543,21 @@ const styles = StyleSheet.create({
   formLogin__btnText: {
     color: colors.textInverse,
     fontSize: fonts.size.md,
-    fontWeight:
-      fonts.weight.semiBold,
+    fontWeight: fonts.weight.semiBold,
   },
   formLogin__other: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   formLogin__otherText: {
     fontSize: fonts.size.sm,
-    fontWeight:
-      fonts.weight.regular,
+    fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
   registerLink: {
     fontSize: fonts.size.sm,
     color: colors.primary,
-    fontWeight:
-      fonts.weight.semiBold,
+    fontWeight: fonts.weight.semiBold,
   },
 });

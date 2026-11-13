@@ -1,123 +1,125 @@
-import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-
+import * as FileSystem from 'expo-file-system/legacy';
+import * as Sharing from 'expo-sharing';
+import axiosClient from '../../api/axiosClient';
 import { colors } from '../../theme/colors';
 import { fonts } from '../../theme/fonts';
 
-interface BackupDataCardProps {
-  onExportPress?: () => void;
-}
+const csvCell = (value: unknown) => `"${String(value ?? '').replace(/"/g, '""')}"`;
 
-export default function BackupDataCard({
-  onExportPress,
-}: BackupDataCardProps) {
+export default function BackupDataCard() {
+  const [exporting, setExporting] = useState(false);
+  const exportData = async () => {
+    try {
+      setExporting(true);
+      const response = await axiosClient.get('/transactions');
+      const data: any[] = Array.isArray(response.data)
+        ? response.data
+        : Array.isArray(response.data?.transactions)
+          ? response.data.transactions
+          : [];
+      const headers = ['Ngày', 'Loại', 'Danh mục', 'Số tiền', 'Phương thức', 'Ghi chú'];
+      const rows = data.map(item => [
+        item.transaction_date,
+        item.type,
+        item.category?.name || item.category_id || '',
+        item.amount,
+        item.payment_method,
+        item.note
+      ]);
+      const csv = '\uFEFF' + [headers, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n');
+      const directory = FileSystem.cacheDirectory;
+      if (!directory) {
+        throw new Error('Không tìm thấy thư mục lưu tạm.');
+      }
+      const uri = `${directory}finflow-transactions-${Date.now()}.csv`;
+      await FileSystem.writeAsStringAsync(uri, csv, {
+        encoding: FileSystem.EncodingType.UTF8
+      });
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(uri, {
+          mimeType: 'text/csv',
+          dialogTitle: 'Xuất dữ liệu giao dịch',
+          UTI: 'public.comma-separated-values-text'
+        });
+      } else {
+        Alert.alert('Không hỗ trợ', 'Thiết bị không hỗ trợ chia sẻ tệp.');
+      }
+    } catch (error) {
+      console.log('Lỗi xuất dữ liệu:', error);
+      Alert.alert('Lỗi', 'Không thể xuất dữ liệu giao dịch.');
+    } finally {
+      setExporting(false);
+    }
+  };
   return (
-    <View style={styles.backupDataCard}>
-      <View style={styles.backupDataCard__header}>
-        <Text style={styles.backupDataCard__title}>
-          Dữ liệu
-        </Text>
-
-        <Text style={styles.backupDataCard__subtitle}>
-          Quản lý dữ liệu tài chính của bạn
-        </Text>
-      </View>
-
-      <TouchableOpacity
-        style={styles.backupDataCard__item}
-        activeOpacity={0.8}
-        onPress={onExportPress}
-      >
-        <View style={styles.backupDataCard__icon}>
-          <Feather
-            name="download"
-            size={18}
-            color={colors.primary}
-          />
+    <View style={styles.card}>
+      <Text style={styles.title}>Dữ liệu</Text>
+      <Text style={styles.subtitle}>Xuất giao dịch thành tệp CSV</Text>
+      <TouchableOpacity style={styles.action} onPress={exportData} disabled={exporting}>
+        <View style={styles.iconBox}>
+          <Feather name="download" size={19} color={colors.primary} />
         </View>
-
-        <View style={styles.backupDataCard__content}>
-          <Text style={styles.backupDataCard__label}>
-            Sao lưu dữ liệu
-          </Text>
-
-          <Text style={styles.backupDataCard__description}>
-            Xuất dữ liệu tài chính của bạn
-          </Text>
+        <View style={styles.content}>
+          <Text style={styles.label}>Sao lưu giao dịch</Text>
+          <Text style={styles.description}>Xuất và chia sẻ dữ liệu CSV</Text>
         </View>
-
-        <Feather
-          name="chevron-right"
-          size={18}
-          color={colors.textMuted}
-        />
+        {exporting ? (
+          <ActivityIndicator color={colors.primary} />
+        ) : (
+          <Feather name="chevron-right" size={19} color={colors.textMuted} />
+        )}
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  backupDataCard: {
+  card: {
     padding: 16,
-    borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.surface,
+    borderRadius: 16,
+    backgroundColor: colors.surface
   },
-
-  backupDataCard__header: {
-    marginBottom: 16,
-  },
-
-  backupDataCard__title: {
+  title: {
     fontSize: fonts.size.base,
     fontWeight: fonts.weight.semiBold,
-    color: colors.text,
-    marginBottom: 4,
+    color: colors.text
   },
-
-  backupDataCard__subtitle: {
+  subtitle: {
     fontSize: fonts.size.sm,
-    fontWeight: fonts.weight.regular,
     color: colors.textMuted,
+    marginTop: 4,
+    marginBottom: 16
   },
-
-  backupDataCard__item: {
-    minHeight: 58,
+  action: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    minHeight: 56
   },
-
-  backupDataCard__icon: {
+  iconBox: {
     width: 40,
     height: 40,
-    borderRadius: 11,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 10,
     backgroundColor: colors.bg,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-
-  backupDataCard__content: {
-    flex: 1,
+  content: {
+    flex: 1
   },
-
-  backupDataCard__label: {
+  label: {
     fontSize: fonts.size.sm,
     fontWeight: fonts.weight.semiBold,
-    color: colors.text,
-    marginBottom: 3,
+    color: colors.text
   },
-
-  backupDataCard__description: {
+  description: {
+    marginTop: 3,
     fontSize: fonts.size.xs,
-    fontWeight: fonts.weight.regular,
-    color: colors.textMuted,
-  },
+    color: colors.textMuted
+  }
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
-
+import { useFocusEffect } from "@react-navigation/native";
 import axiosClient from "../api/axiosClient";
 import EmptyState from "../components/ui/EmptyState";
 import SavingsGoalModal, {
@@ -30,8 +30,7 @@ interface GoalResponse {
   target_amount: number | string;
 }
 
-const formatMoney = (value: number) =>
-  `${value.toLocaleString("vi-VN")} đ`;
+const formatMoney = (value: number) => `${value.toLocaleString("vi-VN")} đ`;
 
 export default function SavingsGoal({ onBack }: SavingsGoalProps) {
   const [goal, setGoal] = useState<GoalData | null>(null);
@@ -39,27 +38,18 @@ export default function SavingsGoal({ onBack }: SavingsGoalProps) {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
 
     try {
-      const now = new Date();
-      const month = now.getMonth() + 1;
-      const year = now.getFullYear();
-
-      const [goalRes, transRes] = await Promise.all([
+      const [goalRes, balanceRes] = await Promise.all([
         axiosClient.get("/savings-goals"),
-        axiosClient.get(`/transactions?month=${month}&year=${year}`),
+        axiosClient.get("/balance"),
       ]);
 
-      const data: GoalResponse | null =
-        goalRes.data?.goal ?? goalRes.data;
+      const data: GoalResponse | null = goalRes.data?.goal ?? goalRes.data;
 
-      if (
-        data &&
-        !Array.isArray(data) &&
-        data.target_amount != null
-      ) {
+      if (data && !Array.isArray(data) && data.target_amount != null) {
         setGoal({
           id: data.id,
           name: data.title,
@@ -69,88 +59,67 @@ export default function SavingsGoal({ onBack }: SavingsGoalProps) {
         setGoal(null);
       }
 
-      const summary = transRes.data?.summary;
-
       setCurrentBalance(
-        Math.max(Number(summary?.balance ?? 0), 0)
+        Math.max(Number(balanceRes.data?.currentBalance ?? 0), 0),
       );
+    } catch (error) {
+      console.log("Lỗi tải mục tiêu tiết kiệm:", error);
+      Alert.alert("Lỗi", "Không thể tải dữ liệu mục tiêu tiết kiệm.");
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchData().catch((err) => {
-      console.log("Lỗi lấy mục tiêu:", err);
-      Alert.alert("Lỗi", "Không thể tải dữ liệu mục tiêu tiết kiệm.");
-    });
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData]),
+  );
 
   const handleSaveGoal = async (data: GoalFormData) => {
     await axiosClient.post("/savings-goals", {
       title: data.name.trim(),
       targetAmount: data.target_amount,
     });
-
     await fetchData();
   };
 
-  const target = goal?.target_amount ?? 0;
+  const target = Number(goal?.target_amount ?? 0);
   const saved = currentBalance;
-
   const percent =
-    target > 0
-      ? Math.min(Math.round((saved / target) * 100), 100)
-      : 0;
+    target > 0 ? Math.min(Math.round((saved / target) * 100), 100) : 0;
+  const remaining = Math.max(target - saved, 0);
 
   return (
-    <SafeAreaView style={styles.savingsGoal}>
-      <View style={styles.savingsGoal__header}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={onBack}>
-          <Feather
-            name="arrow-left"
-            size={24}
-            color={colors.text}
-          />
+          <Feather name="arrow-left" size={24} color={colors.text} />
         </TouchableOpacity>
-
-        <View style={styles.savingsGoal__heading}>
-          <Text style={styles.savingsGoal__title}>
-            Mục tiêu tiết kiệm
-          </Text>
-
-          <Text style={styles.savingsGoal__subtitle}>
+        <View style={styles.heading}>
+          <Text style={styles.title}>Mục tiêu tiết kiệm</Text>
+          <Text style={styles.subtitle}>
             Theo dõi tiến độ tiết kiệm của bạn
           </Text>
         </View>
       </View>
-
       <ScrollView
-        contentContainerStyle={styles.savingsGoal__content}
+        contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.savingsGoal__intro}>
-          <View style={styles.savingsGoal__icon}>
-            <Feather
-              name="target"
-              size={24}
-              color={colors.primary}
-            />
+        <View style={styles.intro}>
+          <View style={styles.icon}>
+            <Feather name="target" size={24} color={colors.primary} />
           </View>
-
-          <View style={styles.savingsGoal__heading}>
-            <Text style={styles.savingsGoal__sectionTitle}>
-              Kế hoạch tiết kiệm
-            </Text>
-
-            <Text style={styles.savingsGoal__label}>
-              Đặt mục tiêu và theo dõi tiến độ
+          <View style={styles.heading}>
+            <Text style={styles.sectionTitle}>Kế hoạch tiết kiệm</Text>
+            <Text style={styles.label}>
+              Đặt mục tiêu và theo dõi tiến độ tích lũy
             </Text>
           </View>
         </View>
-
         <TouchableOpacity
-          style={styles.savingsGoal__button}
+          style={styles.button}
           disabled={loading}
           onPress={() => setShowModal(true)}
         >
@@ -159,89 +128,59 @@ export default function SavingsGoal({ onBack }: SavingsGoalProps) {
             size={20}
             color={colors.textInverse}
           />
-
-          <Text style={styles.savingsGoal__buttonText}>
+          <Text style={styles.buttonText}>
             {goal ? "Điều chỉnh mục tiêu" : "Thiết lập mục tiêu"}
           </Text>
         </TouchableOpacity>
-
         {loading ? (
-          <ActivityIndicator
-            size="large"
-            color={colors.primary}
-          />
+          <ActivityIndicator size="large" color={colors.primary} />
         ) : !goal ? (
-          <View style={styles.savingsGoal__card}>
+          <View style={styles.card}>
             <EmptyState text="Bạn chưa thiết lập mục tiêu tiết kiệm" />
           </View>
         ) : (
-          <View style={styles.savingsGoal__card}>
-            <View style={styles.savingsGoal__row}>
-              <Text style={styles.savingsGoal__sectionTitle}>
+          <View style={styles.card}>
+            <View style={styles.row}>
+              <Text style={styles.sectionTitle}>
                 {goal.name || "Mục tiêu tiết kiệm"}
               </Text>
-
-              <Feather
-                name="target"
-                size={22}
-                color={colors.primary}
-              />
+              <Feather name="target" size={22} color={colors.primary} />
             </View>
-
-            <Text style={styles.savingsGoal__label}>
-              Số tiền mục tiêu
-            </Text>
-
-            <Text style={styles.savingsGoal__amount}>
-              {formatMoney(target)}
-            </Text>
-
-            <View style={styles.savingsGoal__row}>
-              <Text style={styles.savingsGoal__label}>
-                Tiến độ hoàn thành
-              </Text>
-
-              <Text style={styles.savingsGoal__percent}>
-                {percent}%
-              </Text>
+            <Text style={styles.label}>Số tiền mục tiêu</Text>
+            <Text style={styles.amount}>{formatMoney(target)}</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>Tiến độ hoàn thành</Text>
+              <Text style={styles.percent}>{percent}%</Text>
             </View>
-
-            <View style={styles.savingsGoal__progress}>
+            <View style={styles.progress}>
               <View
                 style={[
-                  styles.savingsGoal__progressFill,
-                  {
-                    width: `${percent}%` as `${number}%`,
-                  },
+                  styles.progressFill,
+                  { width: `${percent}%` as `${number}%` },
                 ]}
               />
             </View>
-
-            <View style={styles.savingsGoal__row}>
-              <View>
-                <Text style={styles.savingsGoal__label}>
-                  Số dư tháng này
-                </Text>
-
-                <Text style={styles.savingsGoal__value}>
-                  {formatMoney(saved)}
-                </Text>
+            <View style={styles.row}>
+              <View style={styles.column}>
+                <Text style={styles.label}>Đã tích lũy</Text>
+                <Text style={styles.value}>{formatMoney(saved)}</Text>
               </View>
-
-              <View>
-                <Text style={styles.savingsGoal__label}>
-                  Còn thiếu
-                </Text>
-
-                <Text style={styles.savingsGoal__value}>
-                  {formatMoney(Math.max(target - saved, 0))}
-                </Text>
+              <View style={[styles.column, styles.right]}>
+                <Text style={styles.label}>Còn thiếu</Text>
+                <Text style={styles.value}>{formatMoney(remaining)}</Text>
               </View>
             </View>
+            {percent >= 100 && (
+              <View style={styles.completed}>
+                <Feather name="check-circle" size={18} color={colors.income} />
+                <Text style={styles.completedText}>
+                  Bạn đã đạt mục tiêu tiết kiệm!
+                </Text>
+              </View>
+            )}
           </View>
         )}
       </ScrollView>
-
       <SavingsGoalModal
         visible={showModal}
         onClose={() => setShowModal(false)}
@@ -253,12 +192,11 @@ export default function SavingsGoal({ onBack }: SavingsGoalProps) {
 }
 
 const styles = StyleSheet.create({
-  savingsGoal: {
+  container: {
     flex: 1,
     backgroundColor: colors.bg,
   },
-
-  savingsGoal__header: {
+  header: {
     flexDirection: "row",
     alignItems: "center",
     gap: 16,
@@ -267,36 +205,30 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-
-  savingsGoal__heading: {
+  heading: {
     flex: 1,
     gap: 4,
   },
-
-  savingsGoal__title: {
+  title: {
     fontSize: fonts.size.lg,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
-
-  savingsGoal__subtitle: {
+  subtitle: {
     fontSize: fonts.size.xs,
     color: colors.textMuted,
   },
-
-  savingsGoal__content: {
+  content: {
     padding: 16,
     paddingBottom: 40,
     gap: 16,
   },
-
-  savingsGoal__intro: {
+  intro: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
   },
-
-  savingsGoal__icon: {
+  icon: {
     width: 48,
     height: 48,
     justifyContent: "center",
@@ -306,19 +238,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-
-  savingsGoal__sectionTitle: {
+  sectionTitle: {
     fontSize: fonts.size.md,
     fontWeight: fonts.weight.bold,
     color: colors.text,
+    flexShrink: 1,
   },
-
-  savingsGoal__label: {
+  label: {
     fontSize: fonts.size.sm,
     color: colors.textMuted,
   },
-
-  savingsGoal__button: {
+  button: {
     height: 48,
     flexDirection: "row",
     alignItems: "center",
@@ -327,14 +257,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 8,
   },
-
-  savingsGoal__buttonText: {
+  buttonText: {
     fontSize: fonts.size.sm,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },
-
-  savingsGoal__card: {
+  card: {
     padding: 16,
     gap: 12,
     backgroundColor: colors.surface,
@@ -342,43 +270,56 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-
-  savingsGoal__row: {
+  row: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
   },
-
-  savingsGoal__amount: {
+  column: {
+    flex: 1,
+  },
+  right: {
+    alignItems: "flex-end",
+  },
+  amount: {
     fontSize: fonts.size.xl,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
   },
-
-  savingsGoal__percent: {
+  percent: {
     fontSize: fonts.size.sm,
     fontWeight: fonts.weight.semiBold,
     color: colors.primary,
   },
-
-  savingsGoal__progress: {
+  progress: {
     height: 8,
     backgroundColor: colors.border,
     borderRadius: 8,
     overflow: "hidden",
   },
-
-  savingsGoal__progressFill: {
+  progressFill: {
     height: "100%",
     backgroundColor: colors.primary,
     borderRadius: 8,
   },
-
-  savingsGoal__value: {
+  value: {
     fontSize: fonts.size.base,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginTop: 4,
+  },
+  completed: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "#ECFDF5",
+    padding: 12,
+    borderRadius: 8,
+  },
+  completedText: {
+    fontSize: fonts.size.sm,
+    fontWeight: fonts.weight.semiBold,
+    color: colors.income,
   },
 });

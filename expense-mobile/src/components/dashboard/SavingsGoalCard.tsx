@@ -1,21 +1,16 @@
-import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-
-import EmptyState from '../ui/EmptyState';
-import SectionCard from '../ui/SectionCard';
-
-import { colors } from '../../theme/colors';
-import { fonts } from '../../theme/fonts';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import EmptyState from "../ui/EmptyState";
+import SectionCard from "../ui/SectionCard";
+import { colors } from "../../theme/colors";
+import { fonts } from "../../theme/fonts";
 
 interface SavingsGoalCardProps {
   name?: string | null;
   current?: string | null;
   target?: string | null;
   progress?: number | null;
+  onViewAll?: () => void;
 }
 
 export default function SavingsGoalCard({
@@ -23,63 +18,41 @@ export default function SavingsGoalCard({
   current,
   target,
   progress,
+  onViewAll
 }: SavingsGoalCardProps) {
-  if (
-    !name ||
-    !current ||
-    !target ||
-    progress == null
-  ) {
+  if (!name || !current || !target || progress == null) {
     return (
       <SectionCard
         title="Mục tiêu tiết kiệm"
         rightText="Xem tất cả"
+        onRightPress={onViewAll}
       >
-        <EmptyState />
+        <EmptyState text="Chưa có mục tiêu tiết kiệm" />
       </SectionCard>
     );
   }
 
-  const safeProgress = Math.min(
-    Math.max(progress, 0),
-    100
-  );
-
-  const progressWidth =
-    `${safeProgress}%` as `${number}%`;
+  const safeProgress = Math.min(Math.max(progress, 0), 100);
 
   return (
     <SectionCard
       title="Mục tiêu tiết kiệm"
       rightText="Xem tất cả"
+      onRightPress={onViewAll}
     >
-      <View style={styles.savingsGoalCard__header}>
-        <Text style={styles.savingsGoalCard__name}>
-          {name}
-        </Text>
-
-        <Text style={styles.savingsGoalCard__percent}>
-          {safeProgress}%
-        </Text>
+      <View style={styles.header}>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.percent}>{safeProgress}%</Text>
       </View>
-
-      <View style={styles.savingsGoalCard__values}>
-        <Text style={styles.savingsGoalCard__current}>
-          {current}
-        </Text>
-
-        <Text style={styles.savingsGoalCard__target}>
-          / {target}
-        </Text>
+      <View style={styles.values}>
+        <Text style={styles.current}>{current}</Text>
+        <Text style={styles.target}>/ {target}</Text>
       </View>
-
-      <View style={styles.savingsGoalCard__track}>
+      <View style={styles.track}>
         <View
           style={[
-            styles.savingsGoalCard__progress,
-            {
-              width: progressWidth,
-            },
+            styles.progress,
+            { width: `${safeProgress}%` as `${number}%` }
           ]}
         />
       </View>
@@ -88,54 +61,47 @@ export default function SavingsGoalCard({
 }
 
 const styles = StyleSheet.create({
-  savingsGoalCard__header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10
   },
-
-  savingsGoalCard__name: {
+  name: {
+    flex: 1,
     fontSize: fonts.size.sm,
     fontWeight: fonts.weight.semiBold,
-    color: colors.text,
+    color: colors.text
   },
-
-  savingsGoalCard__percent: {
+  percent: {
     fontSize: fonts.size.xs,
     fontWeight: fonts.weight.medium,
-    color: colors.textMuted,
+    color: colors.primary
   },
-
-  savingsGoalCard__values: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  values: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 12,
+    gap: 4
   },
-
-  savingsGoalCard__current: {
+  current: {
     fontSize: fonts.size.base,
     fontWeight: fonts.weight.bold,
-    color: colors.text,
+    color: colors.text
   },
-
-  savingsGoalCard__target: {
+  target: {
     fontSize: fonts.size.sm,
-    fontWeight: fonts.weight.regular,
-    color: colors.textMuted,
-    marginLeft: 4,
+    color: colors.textMuted
   },
-
-  savingsGoalCard__track: {
-    width: '100%',
+  track: {
     height: 8,
-    borderRadius: 4,
     backgroundColor: colors.border,
-    overflow: 'hidden',
+    borderRadius: 8,
+    overflow: "hidden"
   },
-
-  savingsGoalCard__progress: {
-    height: '100%',
-    borderRadius: 4,
+  progress: {
+    height: "100%",
     backgroundColor: colors.primary,
-  },
+    borderRadius: 8
+  }
 });

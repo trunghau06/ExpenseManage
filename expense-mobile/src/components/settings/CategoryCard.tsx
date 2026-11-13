@@ -1,170 +1,290 @@
-import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-
-import EmptyState from '../ui/EmptyState';
-
+import axiosClient from '../../api/axiosClient';
 import { colors } from '../../theme/colors';
 import { fonts } from '../../theme/fonts';
 
 export interface SettingCategory {
   id: string;
   name: string;
-  icon?: keyof typeof Feather.glyphMap;
+  type?: 'INCOME' | 'EXPENSE';
+  icon?: string;
 }
 
-interface CategoryCardProps {
+interface Props {
   categories?: SettingCategory[];
-  onAddPress?: () => void;
-  onCategoryPress?: (
-    category: SettingCategory
-  ) => void;
+  onChanged?: () => void;
 }
 
-export default function CategoryCard({
-  categories = [],
-  onAddPress,
-  onCategoryPress,
-}: CategoryCardProps) {
+const icons = ['utensils', 'car', 'home', 'shopping-cart', 'coffee', 'book', 'heart', 'briefcase', 'dollar-sign', 'gift', 'tag'] as const;
+type IconName = typeof icons[number];
+
+export default function CategoryCard({ categories = [], onChanged }: Props) {
+  const [type, setType] = useState<'INCOME' | 'EXPENSE'>('EXPENSE');
+  const [visible, setVisible] = useState(false);
+  const [name, setName] = useState('');
+  const [icon, setIcon] = useState<IconName>('tag');
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const filtered = categories.filter(item => item.type === type);
+  const create = async () => {
+    if (!name.trim()) {
+      Alert.alert('Thiếu thông tin', 'Vui lòng nhập tên danh mục.');
+      return;
+    }
+    try {
+      setSaving(true);
+      await axiosClient.post('/categories', {
+        name: name.trim(),
+        type,
+        icon
+      });
+      setVisible(false);
+      setName('');
+      onChanged?.();
+    } catch (error: any) {
+      Alert.alert('Lỗi', error?.response?.data?.message || 'Không thể thêm danh mục.');
+    } finally {
+      setSaving(false);
+    }
+  };
+  const remove = (item: SettingCategory) => {
+    Alert.alert('Xóa danh mục', `Bạn có chắc muốn xóa "${item.name}"?`, [
+      { text: 'Hủy', style: 'cancel' },
+      {
+        text: 'Xóa',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            setDeleting(item.id);
+            await axiosClient.delete(`/categories/${item.id}`);
+            onChanged?.();
+          } catch (error: any) {
+            Alert.alert('Lỗi', error?.response?.data?.message || 'Không thể xóa danh mục.');
+          } finally {
+            setDeleting(null);
+          }
+        }
+      }
+    ]);
+  };
   return (
-    <View style={styles.categoryCard}>
-      <View style={styles.categoryCard__header}>
-        <View style={styles.categoryCard__heading}>
-          <Text style={styles.categoryCard__title}>
-            Danh mục
-          </Text>
-
-          <Text style={styles.categoryCard__subtitle}>
-            Quản lý danh mục thu và chi
-          </Text>
+    <View style={styles.card}>
+      <View style={styles.header}>
+        <View style={styles.heading}>
+          <Text style={styles.title}>Quản lý danh mục</Text>
+          <Text style={styles.subtitle}>Danh mục thu nhập và chi tiêu</Text>
         </View>
-
-        <TouchableOpacity
-          style={styles.categoryCard__addButton}
-          activeOpacity={0.8}
-          onPress={onAddPress}
-        >
-          <Feather
-            name="plus"
-            size={17}
-            color={colors.primary}
-          />
+        <TouchableOpacity style={styles.add} onPress={() => setVisible(true)}>
+          <Feather name="plus" size={19} color={colors.primary} />
         </TouchableOpacity>
       </View>
-
-      {categories.length === 0 ? (
-        <EmptyState text="Chưa có dữ liệu danh mục" />
+      <View style={styles.tabs}>
+        {(['EXPENSE', 'INCOME'] as const).map(item => (
+          <TouchableOpacity
+            key={item}
+            style={[styles.tab, type === item && styles.tabActive]}
+            onPress={() => setType(item)}
+          >
+            <Text style={[styles.tabText, type === item && styles.tabTextActive]}>
+              {item === 'EXPENSE' ? 'Chi tiêu' : 'Thu nhập'} ({categories.filter(c => c.type === item).length})
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      {filtered.length === 0 ? (
+        <Text style={styles.empty}>Chưa có danh mục</Text>
       ) : (
-        <View style={styles.categoryCard__list}>
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={styles.categoryCard__item}
-              activeOpacity={0.8}
-              onPress={() =>
-                onCategoryPress?.(category)
-              }
-            >
-              <View style={styles.categoryCard__icon}>
-                <Feather
-                  name={category.icon || 'tag'}
-                  size={17}
-                  color={colors.primary}
-                />
-              </View>
-
-              <Text style={styles.categoryCard__name}>
-                {category.name}
-              </Text>
-
-              <Feather
-                name="chevron-right"
-                size={17}
-                color={colors.textMuted}
-              />
+        filtered.map(item => (
+          <View style={styles.item} key={item.id}>
+            <View style={styles.iconBox}>
+              <Feather name="tag" size={17} color={colors.primary} />
+            </View>
+            <Text style={styles.itemText}>{item.name}</Text>
+            <TouchableOpacity onPress={() => remove(item)} disabled={deleting === item.id}>
+              {deleting === item.id ? (
+                <ActivityIndicator color={colors.expense} />
+              ) : (
+                <Feather name="trash-2" size={18} color={colors.expense} />
+              )}
             </TouchableOpacity>
-          ))}
-        </View>
+          </View>
+        ))
       )}
+      <Modal visible={visible} transparent animationType="slide" onRequestClose={() => setVisible(false)}>
+        <View style={styles.overlay}>
+          <View style={styles.panel}>
+            <View style={styles.header}>
+              <Text style={styles.title}>Thêm danh mục {type === 'INCOME' ? 'thu' : 'chi'}</Text>
+              <TouchableOpacity onPress={() => setVisible(false)}>
+                <Feather name="x" size={22} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.label}>Tên danh mục</Text>
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              style={styles.input}
+              placeholder="Nhập tên danh mục"
+              placeholderTextColor={colors.textMuted}
+              maxLength={80}
+            />
+            <Text style={styles.label}>Biểu tượng</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.iconScroll}>
+              {icons.map(value => (
+                <TouchableOpacity
+                  key={value}
+                  style={[styles.iconChoice, icon === value && styles.iconChoiceActive]}
+                  onPress={() => setIcon(value)}
+                >
+                  <Feather name={value} size={19} color={icon === value ? colors.textInverse : colors.primary} />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TouchableOpacity style={styles.submit} onPress={create} disabled={saving}>
+              {saving ? <ActivityIndicator color={colors.textInverse} /> : <Text style={styles.submitText}>Thêm danh mục</Text>}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  categoryCard: {
+  card: {
     padding: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
     backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderWidth: 1,
+    borderRadius: 16
   },
-
-  categoryCard__header: {
+  header: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    gap: 12,
-    marginBottom: 16,
+    marginBottom: 16
   },
-
-  categoryCard__heading: {
-    flex: 1,
+  heading: {
+    flex: 1
   },
-
-  categoryCard__title: {
+  title: {
     fontSize: fonts.size.base,
     fontWeight: fonts.weight.semiBold,
-    color: colors.text,
-    marginBottom: 4,
+    color: colors.text
   },
-
-  categoryCard__subtitle: {
+  subtitle: {
+    marginTop: 4,
     fontSize: fonts.size.sm,
-    fontWeight: fonts.weight.regular,
-    color: colors.textMuted,
+    color: colors.textMuted
   },
-
-  categoryCard__addButton: {
+  add: {
     width: 36,
     height: 36,
-    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.bg,
+    borderRadius: 10,
+    backgroundColor: colors.bg
   },
-
-  categoryCard__list: {
-    gap: 2,
+  tabs: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 12
   },
-
-  categoryCard__item: {
+  tab: {
+    flex: 1,
+    paddingVertical: 11,
+    alignItems: 'center',
+    borderRadius: 9,
+    backgroundColor: colors.bg
+  },
+  tabActive: {
+    backgroundColor: colors.primary
+  },
+  tabText: {
+    color: colors.text,
+    fontSize: fonts.size.sm
+  },
+  tabTextActive: {
+    color: colors.textInverse,
+    fontWeight: fonts.weight.semiBold
+  },
+  empty: {
+    paddingVertical: 18,
+    textAlign: 'center',
+    color: colors.textMuted
+  },
+  item: {
     minHeight: 54,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    paddingVertical: 8,
+    gap: 12,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
-
-  categoryCard__icon: {
-    width: 38,
-    height: 38,
+  iconBox: {
+    width: 36,
+    height: 36,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: colors.bg,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-
-  categoryCard__name: {
+  itemText: {
     flex: 1,
     fontSize: fonts.size.sm,
-    fontWeight: fonts.weight.medium,
-    color: colors.text,
+    color: colors.text
   },
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: 'rgba(0,0,0,0.45)'
+  },
+  panel: {
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    padding: 20
+  },
+  label: {
+    fontSize: fonts.size.sm,
+    color: colors.text,
+    marginBottom: 8
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    height: 48,
+    paddingHorizontal: 12,
+    marginBottom: 18,
+    color: colors.text
+  },
+  iconScroll: {
+    marginBottom: 20
+  },
+  iconChoice: {
+    width: 44,
+    height: 44,
+    marginRight: 8,
+    borderRadius: 10,
+    backgroundColor: colors.bg,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  iconChoiceActive: {
+    backgroundColor: colors.primary
+  },
+  submit: {
+    height: 48,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  submitText: {
+    fontWeight: fonts.weight.semiBold,
+    color: colors.textInverse
+  }
 });
