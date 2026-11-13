@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 export const fontSizes = {
   xs: 12,
   sm: 14,
@@ -20,7 +22,7 @@ export const fonts = {
   size: fontSizes,
   weight: fontWeights,
   family: {
-    sans: 'Inter',
+    sans: Platform.select({ ios: 'System', android: 'sans-serif', default: 'System' }) as string,
   },
 } as const;
 

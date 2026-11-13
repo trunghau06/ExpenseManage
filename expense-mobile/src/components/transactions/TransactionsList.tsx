@@ -156,12 +156,14 @@ const styles = StyleSheet.create({
 
   transactionsList__title: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
 
   transactionsList__count: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textMuted,
   },
@@ -203,12 +205,14 @@ const styles = StyleSheet.create({
   transactionsList__name: {
     flex: 1,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
 
   transactionsList__amount: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
   },
 
@@ -223,6 +227,7 @@ const styles = StyleSheet.create({
   transactionsList__category: {
     marginTop: 3,
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
@@ -242,6 +247,7 @@ const styles = StyleSheet.create({
 
   transactionsList__detailText: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },

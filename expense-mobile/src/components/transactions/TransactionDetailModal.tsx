@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "rgba(0, 0, 0, 0.45)"
+    backgroundColor: colors.modalOverlay
   },
   container: {
     padding: 20,
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.md,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text
   },
@@ -110,6 +111,7 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontSize: fonts.size.xl,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold
   },
   row: {
@@ -123,11 +125,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted
   },
   value: {
     flex: 1,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     textAlign: "right"
@@ -149,6 +153,7 @@ const styles = StyleSheet.create({
   },
   closeText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text
   },
@@ -165,6 +170,7 @@ const styles = StyleSheet.create({
   },
   deleteText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.expense
   }

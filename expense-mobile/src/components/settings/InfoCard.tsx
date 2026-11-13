@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
 
   infoCard__title: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginBottom: 4,
@@ -150,6 +151,7 @@ const styles = StyleSheet.create({
 
   infoCard__subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
@@ -193,6 +195,7 @@ const styles = StyleSheet.create({
 
   infoCard__name: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
     marginBottom: 4,
@@ -200,6 +203,7 @@ const styles = StyleSheet.create({
 
   infoCard__email: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
@@ -230,6 +234,7 @@ const styles = StyleSheet.create({
 
   infoCard__detailLabel: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
     marginBottom: 3,
@@ -237,6 +242,7 @@ const styles = StyleSheet.create({
 
   infoCard__detailValue: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.text,
   },

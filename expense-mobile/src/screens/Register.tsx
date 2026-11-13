@@ -98,7 +98,7 @@ export default function Register() {
       return {
         score: 2,
         label: "Trung bình",
-        color: "#F59E0B",
+        color: colors.warning,
       };
     }
 
@@ -603,11 +603,11 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: colors.glassSurface,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.6)",
+    borderColor: colors.glassBorder,
   },
   topbar__brand: {
     flexDirection: "row",
@@ -631,6 +631,7 @@ const styles = StyleSheet.create({
   },
   topbar__brandText: {
     fontSize: fonts.size.md,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
     letterSpacing: 0.5,
@@ -640,18 +641,20 @@ const styles = StyleSheet.create({
   },
   formRegister__title: {
     fontSize: fonts.size.xl,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
     marginBottom: 8,
   },
   formRegister__subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
     lineHeight: 20,
   },
   formRegister__errorBox: {
-    backgroundColor: "rgba(239, 68, 68, 0.1)",
+    backgroundColor: colors.errorSoft,
     borderWidth: 1,
     borderColor: colors.expense,
     borderRadius: 10,
@@ -661,6 +664,7 @@ const styles = StyleSheet.create({
   formRegister__errorText: {
     color: colors.expense,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     textAlign: "center",
   },
@@ -678,11 +682,13 @@ const styles = StyleSheet.create({
   },
   inputFrame__label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
   inputHint: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
@@ -703,13 +709,14 @@ const styles = StyleSheet.create({
   },
   inputField: {
     height: 50,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: colors.inputSurface,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
     paddingLeft: 42,
     paddingRight: 16,
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
   inputFieldPassword: {
@@ -735,6 +742,7 @@ const styles = StyleSheet.create({
   },
   formRegister__strengthLabel: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
@@ -750,7 +758,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1.5,
     borderColor: colors.border,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: colors.inputSurface,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 2,
@@ -762,6 +770,7 @@ const styles = StyleSheet.create({
   formRegister__checkboxLabel: {
     flex: 1,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
     lineHeight: 20,
@@ -791,6 +800,7 @@ const styles = StyleSheet.create({
   formRegister__btnText: {
     color: colors.textInverse,
     fontSize: fonts.size.md,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
   },
   formRegister__other: {
@@ -800,11 +810,13 @@ const styles = StyleSheet.create({
   },
   formRegister__otherText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
   loginLink: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.primary,
     fontWeight: fonts.weight.semiBold,
   },

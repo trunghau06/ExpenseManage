@@ -100,12 +100,14 @@ const styles = StyleSheet.create({
 
   budgetSummaryCard__name: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
 
   budgetSummaryCard__percent: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textMuted,
   },
@@ -118,12 +120,14 @@ const styles = StyleSheet.create({
 
   budgetSummaryCard__spent: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
 
   budgetSummaryCard__limit: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
     marginLeft: 4,

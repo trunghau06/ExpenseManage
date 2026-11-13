@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
 
   financialHealthCard__label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginBottom: 3,
@@ -111,12 +112,14 @@ const styles = StyleSheet.create({
 
   financialHealthCard__status: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
 
   financialHealthCard__value: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
   },

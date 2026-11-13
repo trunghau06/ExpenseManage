@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
 
   transactionsHero__title: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
     marginBottom: 4,
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
 
   transactionsHero__subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
     lineHeight: 20,
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
 
   transactionsHero__buttonText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },

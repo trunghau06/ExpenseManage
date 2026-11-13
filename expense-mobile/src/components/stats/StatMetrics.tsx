@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
 
   statMetrics__label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textMuted,
   },
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
 
   statMetrics__value: {
     fontSize: fonts.size.md,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
@@ -163,6 +165,7 @@ const styles = StyleSheet.create({
 
   statMetrics__valueEmpty: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },

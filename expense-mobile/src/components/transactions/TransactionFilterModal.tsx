@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "rgba(0, 0, 0, 0.45)"
+    backgroundColor: colors.modalOverlay
   },
   container: {
     maxHeight: "75%",
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.md,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text
   },
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.text
   },
   optionTextActive: {

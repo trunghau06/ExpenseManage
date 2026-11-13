@@ -70,11 +70,13 @@ const styles = StyleSheet.create({
   name: {
     flex: 1,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text
   },
   percent: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.primary
   },
@@ -86,11 +88,13 @@ const styles = StyleSheet.create({
   },
   current: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text
   },
   target: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted
   },
   track: {

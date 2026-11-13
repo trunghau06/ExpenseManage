@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
 
   quickActions__label: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.text,
     textAlign: 'center',

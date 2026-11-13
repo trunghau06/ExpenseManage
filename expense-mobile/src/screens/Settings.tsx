@@ -156,11 +156,13 @@ const styles = StyleSheet.create({
   },
   settings__title: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
   settings__subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
     lineHeight: 20,
   },

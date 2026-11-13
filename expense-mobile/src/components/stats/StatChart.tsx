@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
   },
   statChart__legendText: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textMuted,
   },
@@ -182,6 +183,7 @@ const styles = StyleSheet.create({
     height: 28,
     marginTop: 8,
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textMuted,
     textAlign: 'center',

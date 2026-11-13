@@ -112,12 +112,14 @@ const styles = StyleSheet.create({
 
   statHero__title: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
 
   statHero__subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
     lineHeight: 20,
@@ -146,6 +148,7 @@ const styles = StyleSheet.create({
 
   statHero__periodText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textMuted,
   },

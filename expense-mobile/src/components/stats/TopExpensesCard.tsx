@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
 
   topExpensesCard__rankText: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
   },
@@ -134,12 +135,14 @@ const styles = StyleSheet.create({
   topExpensesCard__name: {
     flex: 1,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
 
   topExpensesCard__amount: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.expense,
   },
@@ -168,6 +171,7 @@ const styles = StyleSheet.create({
     width: 36,
     textAlign: 'right',
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textMuted,
   },

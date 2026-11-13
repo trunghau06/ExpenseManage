@@ -441,12 +441,14 @@ const styles = StyleSheet.create({
 
   addTransaction__title: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
 
   addTransaction__subtitle: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
 
@@ -458,6 +460,7 @@ const styles = StyleSheet.create({
 
   addTransaction__error: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.expense,
   },
 
@@ -486,6 +489,7 @@ const styles = StyleSheet.create({
 
   addTransaction__tabText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
 
@@ -500,6 +504,7 @@ const styles = StyleSheet.create({
 
   addTransaction__label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
@@ -519,12 +524,14 @@ const styles = StyleSheet.create({
   addTransaction__input: {
     flex: 1,
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
 
   addTransaction__placeholder: {
     flex: 1,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
 
@@ -547,6 +554,7 @@ const styles = StyleSheet.create({
 
   addTransaction__categoryText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
 
@@ -575,6 +583,7 @@ const styles = StyleSheet.create({
 
   addTransaction__paymentText: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
 
@@ -582,6 +591,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     color: colors.primary,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
   },
 
   addTransaction__note: {
@@ -592,6 +602,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: colors.surface,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
 
@@ -616,6 +627,7 @@ const styles = StyleSheet.create({
   addTransaction__cancelText: {
     color: colors.text,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
   },
 
@@ -636,6 +648,7 @@ const styles = StyleSheet.create({
 
   addTransaction__submitText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },

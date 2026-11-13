@@ -86,11 +86,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text
   },
   subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
     marginTop: 4,
     marginBottom: 16
@@ -114,12 +116,14 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text
   },
   description: {
     marginTop: 3,
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted
   }
 });
