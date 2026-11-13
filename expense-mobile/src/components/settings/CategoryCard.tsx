@@ -54,6 +54,7 @@ export default function CategoryCard({ categories = [], onChanged }: Props) {
       });
       setVisible(false);
       setName('');
+      setIcon('tag');
       onChanged?.();
     } catch (error: any) {
       Alert.alert('Lỗi', error?.response?.data?.message || 'Không thể thêm danh mục.');
@@ -111,7 +112,15 @@ export default function CategoryCard({ categories = [], onChanged }: Props) {
         filtered.map(item => (
           <View style={styles.item} key={item.id}>
             <View style={styles.iconBox}>
-              <Feather name="tag" size={17} color={colors.primary} />
+              <Feather
+                name={
+                  icons.includes(item.icon as IconName)
+                    ? (item.icon as IconName)
+                    : 'tag'
+                }
+                size={17}
+                color={colors.primary}
+              />
             </View>
             <Text style={styles.itemText}>{item.name}</Text>
             <TouchableOpacity onPress={() => remove(item)} disabled={deleting === item.id}>
