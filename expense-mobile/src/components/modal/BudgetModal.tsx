@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
   budgetModal: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    backgroundColor: colors.modalOverlaySoft,
   },
 
   budgetModal__backdrop: {
@@ -292,12 +292,14 @@ const styles = StyleSheet.create({
 
   budgetModal__title: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
 
   budgetModal__subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
 
@@ -312,6 +314,7 @@ const styles = StyleSheet.create({
 
   budgetModal__label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
@@ -330,6 +333,7 @@ const styles = StyleSheet.create({
 
   budgetModal__selectText: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
 
@@ -358,6 +362,7 @@ const styles = StyleSheet.create({
   budgetModal__emptyText: {
     padding: 16,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
     textAlign: "center",
   },
@@ -369,6 +374,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: 8,
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
 
@@ -385,6 +391,7 @@ const styles = StyleSheet.create({
 
   budgetModal__monthText: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
 
@@ -405,6 +412,7 @@ const styles = StyleSheet.create({
 
   budgetModal__cancelText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
@@ -424,6 +432,7 @@ const styles = StyleSheet.create({
 
   budgetModal__saveText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },

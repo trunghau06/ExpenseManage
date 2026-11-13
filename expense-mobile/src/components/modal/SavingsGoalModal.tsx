@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   savingsModal: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    backgroundColor: colors.modalOverlaySoft,
   },
 
   savingsModal__backdrop: {
@@ -243,12 +243,14 @@ const styles = StyleSheet.create({
 
   savingsModal__title: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
 
   savingsModal__subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
 
@@ -263,6 +265,7 @@ const styles = StyleSheet.create({
 
   savingsModal__label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
@@ -274,6 +277,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: 8,
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
 
@@ -294,6 +298,7 @@ const styles = StyleSheet.create({
 
   savingsModal__cancelText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
@@ -313,6 +318,7 @@ const styles = StyleSheet.create({
 
   savingsModal__saveText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },

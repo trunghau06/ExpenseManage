@@ -503,6 +503,7 @@ const styles = StyleSheet.create({
   filterText: {
     flex: 1,
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
   filterSummary: {
@@ -512,10 +513,12 @@ const styles = StyleSheet.create({
   },
   resultText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
   resetText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.primary,
   },
@@ -527,6 +530,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
   messageCard: {
@@ -540,6 +544,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.expense,
     textAlign: "center",
   },
@@ -552,6 +557,7 @@ const styles = StyleSheet.create({
   retryText: {
     color: colors.textInverse,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
   },
 });

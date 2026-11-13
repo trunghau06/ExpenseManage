@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.text,
   },
@@ -189,6 +190,7 @@ const styles = StyleSheet.create({
 
   transactionsFilter__typeText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textMuted,
   },
@@ -212,6 +214,7 @@ const styles = StyleSheet.create({
 
   transactionsFilter__periodText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.text,
   },

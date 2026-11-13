@@ -398,6 +398,7 @@ const styles = StyleSheet.create({
   },
   formLogin__brandName: {
     fontSize: fonts.size.xxl,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
     letterSpacing: -0.5,
@@ -411,6 +412,7 @@ const styles = StyleSheet.create({
   },
   formLogin__brandSlogan: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
     textAlign: "center",
@@ -422,17 +424,19 @@ const styles = StyleSheet.create({
   },
   formLogin__title: {
     fontSize: fonts.size.xl,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
     marginBottom: 8,
   },
   formLogin__subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
   formLogin__errorBox: {
-    backgroundColor: "rgba(239, 68, 68, 0.1)",
+    backgroundColor: colors.errorSoft,
     borderWidth: 1,
     borderColor: colors.expense,
     borderRadius: 10,
@@ -442,6 +446,7 @@ const styles = StyleSheet.create({
   formLogin__errorText: {
     color: colors.expense,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     textAlign: "center",
   },
@@ -453,6 +458,7 @@ const styles = StyleSheet.create({
   },
   inputFrame__label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginBottom: 8,
@@ -474,13 +480,14 @@ const styles = StyleSheet.create({
   },
   inputField: {
     height: 50,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: colors.inputSurface,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
     paddingLeft: 42,
     paddingRight: 16,
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     color: colors.text,
   },
   inputFieldPassword: {
@@ -504,7 +511,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1.5,
     borderColor: colors.border,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: colors.inputSurface,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -514,11 +521,13 @@ const styles = StyleSheet.create({
   },
   formLogin__rememberText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
   forgotPasswordLink: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.primary,
   },
@@ -543,6 +552,7 @@ const styles = StyleSheet.create({
   formLogin__btnText: {
     color: colors.textInverse,
     fontSize: fonts.size.md,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
   },
   formLogin__other: {
@@ -552,11 +562,13 @@ const styles = StyleSheet.create({
   },
   formLogin__otherText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
   registerLink: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.primary,
     fontWeight: fonts.weight.semiBold,
   },

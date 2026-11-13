@@ -6,7 +6,7 @@ export const colors = {
   expense: '#EF4444',
   neutral: '#64748B',
 
-  bg: '#F5F5F5',
+  bg: '#F1F9FF',
   surface: '#FFFFFF',
   border: '#E5E7EB',
   text: '#1F2937',
@@ -34,6 +34,15 @@ export const colors = {
     '#2458B8',
     '#08758A',
   ] as const,
+
+  successSoft: '#ECFDF5',
+  warning: '#F59E0B',
+  errorSoft: 'rgba(239, 68, 68, 0.1)',
+  inputSurface: 'rgba(255, 255, 255, 0.9)',
+  glassSurface: 'rgba(255, 255, 255, 0.8)',
+  glassBorder: 'rgba(255, 255, 255, 0.6)',
+  modalOverlay: 'rgba(0, 0, 0, 0.45)',
+  modalOverlaySoft: 'rgba(0, 0, 0, 0.4)',
 
   shadowPrimary: 'rgba(37, 99, 235, 0.35)',
   shadowCard: 'rgba(0, 30, 90, 0.08)',

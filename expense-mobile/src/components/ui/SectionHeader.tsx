@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
   sectionHeader__title: {
     flex: 1,
     fontSize: fonts.size.xl,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
   },

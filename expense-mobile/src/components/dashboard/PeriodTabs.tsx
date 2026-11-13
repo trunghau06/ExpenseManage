@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
 
   periodTabs__text: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textMuted,
   },

@@ -71,12 +71,14 @@ const styles = StyleSheet.create({
 
   sectionCard__title: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
 
   sectionCard__rightText: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.primary,
     marginTop: 2,

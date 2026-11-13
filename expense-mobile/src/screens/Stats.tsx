@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
   stats__hint: {
     color: colors.textMuted,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
   },
   stats__error: {
     backgroundColor: colors.surface,
@@ -219,6 +220,7 @@ const styles = StyleSheet.create({
   stats__errorText: {
     color: colors.expense,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     textAlign: 'center',
   },
   stats__retry: {

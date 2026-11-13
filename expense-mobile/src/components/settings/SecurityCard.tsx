@@ -151,6 +151,7 @@ const styles = StyleSheet.create({
 
   securityCard__title: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginBottom: 4,
@@ -158,6 +159,7 @@ const styles = StyleSheet.create({
 
   securityCard__subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
@@ -184,6 +186,7 @@ const styles = StyleSheet.create({
 
   securityCard__label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginBottom: 3,
@@ -191,6 +194,7 @@ const styles = StyleSheet.create({
 
   securityCard__description: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },

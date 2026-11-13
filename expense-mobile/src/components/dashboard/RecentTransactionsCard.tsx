@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
 
   recentTransactionsCard__name: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginBottom: 4,
@@ -130,12 +131,14 @@ const styles = StyleSheet.create({
 
   recentTransactionsCard__detail: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },
 
   recentTransactionsCard__amount: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
   },
 });

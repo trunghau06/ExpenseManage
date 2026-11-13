@@ -17,7 +17,19 @@ interface Props {
   onChanged?: () => void;
 }
 
-const icons = ['utensils', 'car', 'home', 'shopping-cart', 'coffee', 'book', 'heart', 'briefcase', 'dollar-sign', 'gift', 'tag'] as const;
+const icons = [
+  'coffee',
+  'truck',
+  'home',
+  'shopping-cart',
+  'book',
+  'heart',
+  'briefcase',
+  'dollar-sign',
+  'gift',
+  'tag'
+] as const;
+
 type IconName = typeof icons[number];
 
 export default function CategoryCard({ categories = [], onChanged }: Props) {
@@ -171,12 +183,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text
   },
   subtitle: {
     marginTop: 4,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted
   },
   add: {
@@ -234,13 +248,14 @@ const styles = StyleSheet.create({
   itemText: {
     flex: 1,
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.text
   },
   overlay: {
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: 'rgba(0,0,0,0.45)'
+    backgroundColor: colors.modalOverlay
   },
   panel: {
     backgroundColor: colors.surface,
@@ -249,6 +264,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.text,
     marginBottom: 8
   },

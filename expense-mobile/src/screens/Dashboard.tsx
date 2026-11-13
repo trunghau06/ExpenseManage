@@ -419,11 +419,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
   subtitle: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
   goal: {
@@ -431,11 +433,13 @@ const styles = StyleSheet.create({
   },
   goalName: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
   goalAmount: {
     fontSize: fonts.size.xxl,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
   },
@@ -447,10 +451,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
   percent: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.primary,
   },
@@ -467,6 +473,7 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginTop: 4,

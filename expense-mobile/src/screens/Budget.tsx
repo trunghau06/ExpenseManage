@@ -382,11 +382,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
   subtitle: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
   content: {
@@ -407,6 +409,7 @@ const styles = StyleSheet.create({
   },
   monthText: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
@@ -421,6 +424,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },
@@ -445,17 +449,20 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: fonts.size.md,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
     flexShrink: 1,
   },
   label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
     marginTop: 4,
   },
   amount: {
     fontSize: fonts.size.xl,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
   },
@@ -469,11 +476,13 @@ const styles = StyleSheet.create({
   },
   spent: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.expense,
   },
   remaining: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.income,
   },
@@ -490,12 +499,14 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     flexShrink: 1,
   },
   percent: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.primary,
   },

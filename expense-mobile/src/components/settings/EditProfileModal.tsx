@@ -81,7 +81,7 @@ export default function EditProfileModal({ visible, phone, onClose, onSaved }: P
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    backgroundColor: colors.modalOverlay,
     justifyContent: 'center',
     padding: 20
   },
@@ -98,11 +98,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.md,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text
   },
   label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.text,
     marginBottom: 8
   },
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
     height: 48,
     paddingHorizontal: 12,
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     color: colors.text
   },
   actions: {

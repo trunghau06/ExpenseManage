@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
 
   emptyState__text: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
   },

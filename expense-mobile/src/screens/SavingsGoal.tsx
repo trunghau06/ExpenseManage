@@ -211,11 +211,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
   subtitle: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
   content: {
@@ -240,12 +242,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: fonts.size.md,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
     flexShrink: 1,
   },
   label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     color: colors.textMuted,
   },
   button: {
@@ -259,6 +263,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },
@@ -284,11 +289,13 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontSize: fonts.size.xl,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.primary,
   },
   percent: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.primary,
   },
@@ -305,6 +312,7 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
     marginTop: 4,
@@ -313,12 +321,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    backgroundColor: "#ECFDF5",
+    backgroundColor: colors.successSoft,
     padding: 12,
     borderRadius: 8,
   },
   completedText: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.income,
   },

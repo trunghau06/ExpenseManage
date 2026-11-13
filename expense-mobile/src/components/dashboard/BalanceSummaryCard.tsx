@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
 
   balanceSummaryCard__label: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },
@@ -223,6 +224,7 @@ const styles = StyleSheet.create({
 
   balanceSummaryCard__balance: {
     fontSize: fonts.size.xxl,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.textInverse,
     marginTop: 4,
@@ -230,6 +232,7 @@ const styles = StyleSheet.create({
 
   balanceSummaryCard__balanceEmpty: {
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
   },
 
@@ -267,6 +270,7 @@ const styles = StyleSheet.create({
   balanceSummaryCard__metricLabel: {
     flexShrink: 1,
     fontSize: fonts.size.base,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },
@@ -274,6 +278,7 @@ const styles = StyleSheet.create({
   balanceSummaryCard__metricValue: {
     width: '100%',
     fontSize: fonts.size.lg,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
   },
 
@@ -295,12 +300,14 @@ const styles = StyleSheet.create({
 
   balanceSummaryCard__budgetLabel: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textInverse,
   },
 
   balanceSummaryCard__budgetPercent: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.textInverse,
   },

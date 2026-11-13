@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
 
   expenseAllocationCard__chartLabel: {
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.regular,
     color: colors.textMuted,
     marginBottom: 4,
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
 
   expenseAllocationCard__chartValue: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.bold,
     color: colors.text,
   },
@@ -141,6 +143,7 @@ const styles = StyleSheet.create({
 
   expenseAllocationCard__name: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.text,
   },
@@ -153,6 +156,7 @@ const styles = StyleSheet.create({
 
   expenseAllocationCard__amount: {
     fontSize: fonts.size.sm,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.semiBold,
     color: colors.text,
   },
@@ -161,6 +165,7 @@ const styles = StyleSheet.create({
     width: 34,
     textAlign: 'right',
     fontSize: fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight: fonts.weight.medium,
     color: colors.textMuted,
   },

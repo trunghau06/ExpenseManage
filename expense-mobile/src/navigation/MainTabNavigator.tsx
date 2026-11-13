@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
   mainTab__label: {
     fontSize:
       fonts.size.xs,
+    fontFamily: fonts.family.sans,
     fontWeight:
       fonts.weight.medium,
   },
